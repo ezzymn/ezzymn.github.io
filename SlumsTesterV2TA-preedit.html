@@ -1,0 +1,935 @@
+<!-- Things that need to be modified 
+
+  - name of 'next' on title page to read continue
+  - move tables to the center
+  - triangle question - move clear box to center
+  - Drop down box doesnt work on touch pad.  - Send Chih-Chun the hover article
+  - add the 5 object boxes for the remember the items
+  - make time smaller so it fits on a page
+  - add the clock time back on
+  - 3 buttons - triangle, square, circle
+  - move save in local database back one question page
+  - 
+  -->
+
+  <!-- Possible changes that could be done
+
+  1) Change the clock question 
+      - Split into two pages : The first is hour markers, The second is the time
+      - add the image of the first as the template of the second
+
+    -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    
+    <title>SLUMS Examination</title>
+    <!--script src="//code.jquery.com/jquery-1.10.2.js"></script-->
+    
+    <script type="text/javascript">
+
+    //Function used by moveEventFunction to detect where on the appplication canvas the event has taken place.
+    //Takes into account different platforms - Firefox, Chrome, Safari.
+    function getCoords(e) {
+      if (e.offsetX) {
+        // Works in Chrome / Safari (except on iPad/iPhone)
+        return { x: e.offsetX, y: e.offsetY };
+      }
+      else if (e.layerX) {
+        // Works in Firefox
+        return { x: e.layerX, y: e.layerY };
+      }
+      else {
+        // Works in Safari on iPad/iPhone
+        return { x: e.pageX - currentDrawCanvas.offsetLeft, y: e.pageY - currentDrawCanvas.offsetTop };
+        }
+    }
+
+
+    //Declaring array of sound tracks
+    var folderroot = "Audio/Mary/Edited/"
+    var track = ["intro", "name", "age", "education","following","day","year","county","remember","objects list","mathsinfo","mathsq1","mathsq2","typeanimals","objects","numbersexample","numbersq1","numbersq2","numbersq3","clockmarker","clocktime","x","figures","story","storyname","storywork","storybacktowork","storycountry","thankyou"];
+
+    function clearLocalData(){
+      if(confirm("really?")){
+        localStorage.setItem("all_items", "[]");
+        localStorage.setItem("current_item", "[]");
+        seeDatabase();
+
+      }
+    }
+
+    function submitData(){
+      mail = "chihchun_chen@yahoo.co.uk"
+      subject = encodeURIComponent("SLUMSData")
+
+      var keys = []
+      var content = ""
+      $("input,select").each(function(i,e){
+        if($(e).attr("name")){
+          name = $(e).attr("name")            
+          keys.push(name)
+          content += name + ","
+        }
+      });
+
+      content += "\n"
+
+      if(localStorage.getItem("all_items")){
+        var allAnswers = JSON.parse(localStorage.getItem("all_items"))
+        for(a=0;a<allAnswers.length;a++){
+          var line = ""
+          for(i=0;i<keys.length;i++){
+            var val = allAnswers[a][keys[i]]
+            line += val + ","
+          }
+          line += "\n"
+          content += line
+        }
+      }
+
+      body = encodeURIComponent(content);
+      window.location.href = "mailto:"+mail+"?subject="+subject+"&body="+body
+    }
+
+    function seeDatabase(){
+      $(".question").hide()
+      $("#local_database").show()
+      stopaudio()
+
+      var tr = $("<tr></tr>")
+
+      $("thead").html("").append(tr)
+
+      var keys = []
+      $("input,select").each(function(i,e){
+        if($(e).attr("name")){
+          //console.log(i,e)
+          name = $(e).attr("name")
+            
+          keys.push(name)
+
+          tr.append("<th>"+name+"</th>")
+        }
+      });
+
+      if(localStorage.getItem("all_items")){
+      var allAnswers = JSON.parse(localStorage.getItem("all_items"))
+        for(a=0;a<allAnswers.length;a++){
+          var tr = $("<tr></tr>")
+          $("tbody").append(tr)
+          for(i=0;i<keys.length;i++){
+            var val = allAnswers[a][keys[i]]
+            tr.append("<td>"+val+"</td>");
+          }
+        }
+      }
+
+    }
+
+
+    function saveCurrent(){
+        
+      if(!jQuery.isEmptyObject(currentQuestion)){
+
+        if(localStorage.getItem("all_items")){
+          var allAnswers = JSON.parse(localStorage.getItem("all_items"))
+          console.log("Loaded current objects:", currentQuestion)
+        }
+        else{
+          var allAnswers = [];
+        }
+
+        allAnswers.push(currentQuestion);
+        localStorage.setItem("all_items", JSON.stringify(allAnswers));
+       
+        currentQuestion = {};
+        alert("results saved in db.")
+
+        location.hash = "#q0";
+        location.reload();
+      }
+      seeDatabase();
+
+    }
+
+
+    var p1; //Coordinates for location on the application canvas that has been touched.
+    var currentDrawCanvas; //Current canvas.
+    var ctx; //Drawing canvas.
+    var responses = [];//Array to hold all the responses.
+    var mouseX;
+    var mouseY;
+    
+    //Sets the p1 variable to reflect position of the touch event.
+    function moveEventFunction(e) {
+
+      if(currentDrawCanvas){
+        ctx = currentDrawCanvas.getContext("2d");  
+
+        if (e.touches) {
+          for (var i = 1; i <= e.touches.length; i++) {
+            var p = getCoords(e.touches[i - 1]); // Get info for finger i
+            console.log(p.x,p.y)
+            if(!p1){
+              p1 = p
+            }else{
+              ctx.beginPath();
+              ctx.strokeStyle = "#F00";
+              ctx.moveTo(p1.x,p1.y);
+              ctx.lineTo(p.x,p.y);
+              ctx.stroke();
+              p1 = p;
+              
+            }
+          }
+        }
+      }
+      else {
+
+        sketchpad_mouseMove(e);
+      }
+      
+            
+      return false; // Stop event bubbling up and doing other stuff (like pinch zoom or scroll)
+    }
+
+    // Get the current mouse position relative to the top-left of the canvas
+    function getMousePos(e) {
+        if (!e)
+            var e = event;
+
+        if (e.offsetX) {
+            mouseX = e.offsetX;
+            mouseY = e.offsetY;
+            console.log("offsetX: " + mouseX)
+            console.log("offsetY: " + mouseY)
+            
+        }
+        else if (e.layerX) {
+            console.log("layerX: " + mouseX)
+            console.log("layerY: " + mouseY)
+            
+
+            mouseX = e.layerX;
+            mouseY = e.layerY;
+        }
+        //p1 = {x: mouseX, y: mouseY};
+     }
+
+
+
+    //Adds the coordinates to the array of cooridnates for q8
+    function recordClockCoords(coords) {
+      q8.append(coords);
+    }
+
+   
+    
+    //Draws a circle on the application canvas.
+    function drawCircle(domElement){
+      $(domElement).attr("width", 500)
+      $(domElement).attr("height", 500)
+
+      ctx = domElement.getContext("2d");
+      
+      ctx.clearRect(0, 0, domElement.width, domElement.height);
+      ctx.strokeStyle = "black";
+      ctx.arc(domElement.width / 2, domElement.height / 2, 200  , 0, Math.PI * 2);
+      ctx.stroke();
+      if (ctx) {
+        domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
+        domElement.addEventListener('mousemove', sketchpad_mouseMove, false);
+        window.addEventListener('mouseup', sketchpad_mouseUp, true);
+      }
+    }
+
+    //Draws a box on the application canvas. 
+    function drawBoxes(domElement){
+      console.log("drawBoxes")
+
+      $(domElement).attr("width", 700)
+      $(domElement).attr("height", 210)
+          
+      ctx=domElement.getContext("2d");
+
+      ctx.clearRect(0, 0, domElement.width, domElement.height);
+      //Draws the square
+      ctx.strokeRect(1,1,200,200);
+
+      var d = 500;
+      //Draws the rectangle
+      ctx.strokeRect(1+d,1,100,200);
+
+      var tX = 350;
+      ctx.beginPath();
+      ctx.moveTo(tX,1);
+      //Draws the triangle
+      ctx.lineTo(tX+100,200);
+      ctx.lineTo(tX-100,200);
+      ctx.lineTo(tX,1);
+      ctx.stroke();
+
+      if (ctx) {
+        domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
+        domElement.addEventListener('mousemove', sketchpad_mouseMove, false);
+        window.addEventListener('mouseup', sketchpad_mouseUp, true);
+      }
+    }
+
+    if(localStorage.getItem("current_item")){
+      var currentQuestion = JSON.parse(localStorage.getItem("current_item"))
+      console.log("Loaded current object:", currentQuestion)
+    }else{
+
+      console.log("No current object.")
+      var currentQuestion = {};
+    }
+
+
+    // Hides the maths question after a set amount of time
+
+     setTimeout(function() {
+      $('#mathsquestion').hide();
+      }, 5000);
+
+
+    //Attaches the event handler 'touchmove' to the document.
+    $(document).bind('touchmove', false);
+
+    //Holds off function execution till DOM completely loaded.
+    $(document).ready(function(){
+
+      $("input, select").change(function(evt){
+          
+        currentQuestion[evt.target.name] = evt.target.value;
+        localStorage.setItem("current_item", JSON.stringify(currentQuestion));
+        console.log("saved:", currentQuestion)
+      });
+
+      //Applies function to every element with class='question'
+      $(".question").each(function(i,e){
+        $(e).attr("id","q"+i)
+        //The 'Next' button
+        var btn = $('<input type="button" class="next" value="Next">'); //Creates the 'Next' button
+        btn.attr("data-to",i+1) //'Next' Button associated with next page (question).          
+        btn.attr("data-id",i) //Let the 'Next' button know what page (question) it's currently on.
+
+        //Binds the event handler 'click' to the event where the 'Next' button is clicked.
+        btn.bind('click', function(ev){
+          var toId = $(ev.target).data("to")
+          $(".question").hide()//Hide previous page
+          $("#q"+toId).show()  //Show next page
+          location.hash = "#q"+toId //Moves to next page.
+          stopaudio() //Stops the audio track playing
+          $("audio").attr("src",folderroot + track[i] + ".mp3"); //changes the track according to the array
+          playaudio() //Starts the audio track playing
+        });
+        $(e).append(btn) //'Next' button now listens for events
+
+        //The 'Previous' button
+        var btn3 = $('<input type="button" class="previous" value="Previous">'); //Creates the 'Previous' button
+        btn3.attr("data-to",i-1) //'Previous' Button associated with Previous page (question).          
+        btn3.attr("data-id",i) //Let the 'Previous' button know what page (question) it's currently on.
+
+        //Binds the event handler 'click' to the event where the 'Previous' button is clicked.
+        btn3.bind('click', function(ev){
+          var toprev = $(ev.target).data("to")         
+          $(".question").hide()//Hide previous page
+          $("#q"+toprev).show()  //Show next page
+          location.hash = "#q"+toprev //Moves to next page.
+          stopaudio() //Stops audio
+        });
+        $(e).append(btn3) //'Previous' button now listens for events */
+
+        //The 'Start over' button
+        var btn2 = $('<input type="button" class="over" value="start over">'); //Creates the 'Start over' button.
+        //Binds the event handler 'click' to the event where the 'Start over' button is clicked.
+        btn2.bind('click', function(ev){
+          //Display a pop-up box that asks user to confirm action
+          if(confirm("really start over?")){
+            //Reset the page (question) number
+            location.hash = "#q0";
+            //Reload the page.
+            location.reload();
+            stopaudio();
+          }
+        });
+        $(e).append(btn2) //'Start over' button now listens for events (i.e. detects when it is clicked)
+      });
+
+
+      //START
+      if(location.hash){
+        //Logs the question (page) number to the console
+        console.log(location.hash)
+        //Introduce a variable holding the question identifier representing the current question number, e.g. q1 will be the identifier if we are on question 1.
+        var hId = location.hash
+      }else{
+        //Introduce a variable holding the question identifier representing the start of the test, q0.
+        var hId = "#q0"
+      }
+
+      //Display the question identifier
+      $(hId).show()
+
+      var can = document.getElementById("canvas1");
+      
+      //Draws circle on 'canvas1'
+      drawCircle(can);
+      //When canvas1 is touched, associate it wth currentDrawCanvas so we know it is now available to act on.
+      can.ontouchstart = function(e){
+        currentDrawCanvas = document.getElementById("canvas1");
+      }
+      can.onmousedown = function(e){
+        currentDrawCanvas = document.getElementById("canvas1");
+      }
+      //Handle different types of input.  
+      can.ontouchmove = moveEventFunction; //Associates touch with moveEventFunction.
+      can.onmousemove = moveEventFunction; //Associates mouse movement with moveEventFunction.
+      
+      //When canvas interaction has ended, no more cooordinates recorded.
+      can.ontouchend = function(e){
+          //Resets p1
+        p1 = null;
+      };
+      can.onmouseup = function(e) {
+        mouseDown = 0;
+        p1 = null;
+      }
+      mouseDown = 0;
+
+
+      var can2 = document.getElementById("canvas2");
+      //Draws boxes on 'canvas2'
+      drawBoxes(can2);
+      //When canvas2 is touched, associate it with currentDrawCanvas so we know it is available to act on.
+      can2.ontouchstart = function(e){
+        currentDrawCanvas = document.getElementById("canvas2");
+      }
+      can2.onmousedown = function(e) {
+        currentDrawCanvas = document.getElementById("canvas2");
+      }
+      //Handle different types of input.  
+      can2.ontouchmove = moveEventFunction; //Associates touch with moveEventFunction.
+      can2.onmousemove = moveEventFunction; //Associates mouse movement with moveEventFunction.
+      
+      //When canvas interaction has ended, no more cooridnates recorded.
+      can2.ontouchend = function(e){
+        //Resets p1
+        p1 = null;
+      };
+      can2.onmouseup = function(e) {
+        mouseDown = 0;
+        p1 = null;
+      }
+    });
+
+    //Drawing functions:
+    // Draws a dot at a specific position on the supplied canvas name
+    // Parameters are: A canvas context, the x position, the y position, the size of the dot
+
+
+    var mode = "pen"
+
+
+    function drawDot(ctx,x,y,size,e) {     
+    /*var mode="pen";    
+    $("#pen").click(function(){ mode="pen"; });
+    $("#eraser").click(function(){
+     mode="eraser"; */
+   
+
+      if(mode=="erase"){
+      ctx.fillStyle = "#FFFFFF";
+    }
+
+      else { 
+      ctx.fillStyle = "#000000";
+       
+      }
+
+
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI*2, true); 
+      ctx.closePath();
+      ctx.fill();
+
+
+    } 
+
+    function erase() {
+      mode = "erase";
+      console.log("eraser selected")
+    }
+
+
+    function pen() {
+      mode = "pen"
+      console.log("pen selected")
+    }
+
+    // Keep track of the mouse button being pressed and draw a dot at current location
+    function sketchpad_mouseDown() {
+        mouseDown=1;
+        drawDot(ctx,mouseX,mouseY,2, e);
+    }
+
+    // Keep track of the mouse button being released
+    function sketchpad_mouseUp() {
+        mouseDown=0;
+    }
+
+    // Keep track of the mouse position and draw a dot if mouse button is currently pressed
+    function sketchpad_mouseMove(e) { 
+        // Update the mouse co-ordinates when moved
+        getMousePos(e);
+
+        // Draw a dot if the mouse button is currently being pressed
+        if (mouseDown==1) {
+
+          if (mode=="erase") {
+            drawDot(ctx,mouseX,mouseY,4,e);
+          }
+          else {
+            drawDot(ctx,mouseX,mouseY,2,e);
+          }
+        }
+    }
+
+    // Stops the current audio track 
+    function stopaudio() {
+    var audioPlayer = document.getElementsByTagName('audio')[0];
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+}
+
+  function playaudio() {
+    var audiosection =document.getElementsByTagName('audio')[0];
+    audiosection.play();
+  }
+
+
+  
+    
+
+</script>
+  
+    <style>
+
+    /*Default font*/
+      *{
+        font-family:'Arial Rounded MT Bold';
+      }
+      /*Formatting for questions (pages)*/
+      /*.info{
+        text-align: center;
+        padding: 30px;
+      }*/
+
+      .question{
+    		
+        text-align: center;
+    		display: none;
+    		padding: 30px;
+        height: 100%;
+    	}
+
+
+        #header {
+       background-color:black;
+       height:100px;
+       color:white;
+        text-align:center;
+        padding:5px;
+       }
+
+       #section {
+        float:left;
+        float:top;
+        padding:10px;  
+        text-align: "center";
+        width:100%;
+        }
+
+        #audiosection {
+         position:absolute;
+         bottom:0;
+         width:100%;
+         height:60px;   
+        }
+
+        #testee {
+        color:#4169E1;
+        }
+
+        #tester {
+        font-weight: bold;
+        }
+
+       .headerclass {
+        background:#000000;
+        border:1px solid #CCC;
+        width:fixed:100%;
+        margin:0px auto;
+        top:0px;
+      }
+
+      .number{
+        position: absolute;
+        top:0px;
+        right:0px;
+        width:50px;
+        height:50px;
+        font-size: 18px;
+      }
+
+      .next{
+        position: absolute;
+        right:0px;
+        top:10px;
+      }   
+
+      .previous{
+        position: absolute;
+        left:0px;
+        top:10px;
+      }  
+       
+
+      .over{
+        position: absolute;
+        right:0px;
+        bottom:10px;
+      }
+
+      
+
+      #q0 .over{
+        display:none;
+      }
+
+      #q0 .previous{ 
+        display:none;
+      }
+
+      #q1 .previous{
+        display:all;
+      }
+
+      #q0 .audiosection{
+        display: none;
+      }
+
+      #q1 .audiosection{
+        display: all;
+      }
+
+      .database{
+        position: absolute;
+        left:0px;
+        top:10px;      
+      }
+
+      #q22 .next{
+        display:none;
+      }
+
+      table{
+        margin: 30px;
+      }
+
+      td{
+        padding:00px;
+      }
+
+    	input, select{
+			 font-size: 36px;
+			 padding: 10px;
+       margin:20px;
+    	}
+  
+      /*Hide local database*/
+      #local_database{
+        display: none;
+      
+      }
+
+      /*Formatting for canvas1*/
+      #canvas1{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+   
+    
+    
+    <!--form id="form1" name="form1" method="post" action="getData"-->
+
+     <!--Title Page -->
+      <div id="header">
+      <h1>Screening Test</h1>
+      </div>  
+
+    <!-- Blank title page to help things go smoother-->
+
+    <div class="question">
+      <h1> This is the title page. We will jazz it up later </h1>
+    </div>
+
+
+
+    <div class = "question">
+    <div id="section">
+
+      
+
+      This is an initial application designed to investigate whether mobile devices are suitable to administer apps which affect mental health. This is NOT a screening test for dementia. We are not qualified to diagnose dementia, nor are we trying to. We are using the St Louis University Mental Status Exams (SLUMS) as an example of such a test. If you wish to participate in the study, please press continue.
+       <input type="submit" class="database" onclick="seeDatabase();" value="See local database" />
+       </div>      
+        
+       </div> 
+    
+
+
+    <!-- Questions -->
+  	<div id="section">
+      
+        <audio id="audiosection" controls></audio>
+
+
+
+
+    <div  align="center" class="question" title="details">
+      <table>
+        <tr><td><h2><center>First name</h2></td><td><center><input id="first_name" name="first_name" type="text" value=""/></tr></center>
+        <tr><td><h2>Surname</h2></td><td><input id="surname" name="surname" type="text" value=""/></tr>
+      </table>
+      <div id="audiosection">
+      <audio controls></audio>
+    </div>
+    </div>
+
+
+
+    <div class="question" title="details2">
+      <table>
+        <tr><td><h2>Age</h2></td><td><input id = "age" name="age" type="number" value=""/></td></tr>
+        <tr><td><h2>Date of birth</h2></td><td><input id="dob" name="dob" type="date" value=""></td></tr>
+      </table>
+      </div>
+    
+
+
+
+    <div align="center" class="question" title="details3">
+      <table>       
+        <tr><td><h2>Highest level of Education</h2></td><td><input id="education" name="education" type="text" list="educationlevels" value="None"/></td></tr>
+        <datalist id="educationlevels">
+                    <option label="Primary" value="Primary"></option>
+                    <option label="Secondary" value="Secondary"></option>
+                    <option label="University" value="University"></option>
+                    <option label="Masters" value="Masters"></option>
+                    <option label="PhD" value="PhD"></option>
+                    <option label="Other" value="Other"></option>
+        </datalist> 
+      </table>
+      <div id="audiosection">
+     <audio controls></audio>
+   </div>
+  	</div>
+ 
+
+
+    <div class = "question">
+    The following pages will ask you questions about your memory. It is not a test that you can fail, but is merely a tool to check the amount of memory you have, such as a thermometer measures your temperature. 
+      </div>
+
+      
+
+  
+    <div  align="center" class="question">
+      <h2 id="testee">  What day of the week is it? </h2>
+      <input id="q1" name="q1" type="text" value=""/>
+    </div>
+
+    
+
+    <div  align="center" class="question">   
+      <h2 id="testee">What is the year?</h2> 
+      <input id="q2" name="q2" type="number" value=""/>
+    </div>
+
+
+
+    <div  align="center" class="question">
+      <h2 id="testee">What county are we in?</h2>
+      <input id="q3" name="q3" type="text" value=""/>
+    </div>
+
+
+
+    <div  align="center" class="question">
+      <h2 id="testee">Please remember these five objects. I will ask you what they are later.</h2></p>
+      <ul id="testee">
+        <li>Apple</li>
+        <li>Pen</li>
+        <li>Tie</li>
+        <li>House</li>
+        <li>Car</li>
+      </ul>
+    </div>
+
+
+
+    <div  align="center" class="question">
+        <div id="mathsquestion">
+      <h2 id="testee">You have £100 and you go to the store and buy a dozen apples for £3 and a tricyle for £20.</h2>
+    </div>
+    <p>
+      <h2 id="testee">How much did you spend?</h2>
+      </p>
+      <input id="q5a" name="q5a" type="text" value=""/>
+    </div>
+
+
+
+    <div align="center" class="question">
+      <h2 id="testee">How much do you have left?</h2>
+      <input id="q5b" name="q5b" type="text" value=""/>
+    </div>
+
+
+
+    <div  align="center" class="question">
+      <p>
+      <h2 id="testee">Please name as many animals as you can in one minute.</h2>
+      <input id="q6" name="q6" type="text" value=""/>       
+    </div>
+
+
+
+    <div  align="center" class="question" id="testee">
+      <h2 id="testee">What were the five objects I asked you to remember?</h2></p>
+      <input id="q7" name="q7" type="text" value="" />    
+    </div>
+
+
+
+    <div  align="center" class="question">      
+      <h2 id="testee">I'm going to give you a series of numbers and I would like you to give them to me backwards. For Example, if I say 42, you would say 24.</h2>
+    </div>
+
+
+
+      <div align="center" class="question">      
+      <table>
+        <tr><td><h2 id="testee">Question 1</h2></td><td><input id="q8a" name="q8a" type="text" value=""></td></tr>
+        <tr><td><h2 id="testee">Question 2</h2></td><td><input id="q8b" name="q8b" type="text" value=""></td></tr>
+        <tr><td><h2 id="testee">Question 3</h2></td><td><input id="q8c" name="q8c" type="text" value=""></td></tr>
+      </table>
+    </div>
+
+
+
+    <div align="center" class="question">
+      <span style="font-size:14px;">This is a clock face.<br>
+       Please draw the hour markers </span>
+      <canvas id="canvas1"></canvas>
+      <input type="button" onclick="drawCircle($('#canvas1')[0]);" value="clear">
+      <input type="button" onclick="erase();" value="Eraser">
+      <input type="button" onclick="pen();" value="Pen">
+    </div>
+
+    <div align="center" class="question">
+      Please draw what the clock would look like at ten minutes to 11 o'clock
+      <canvas id="canvas1"></canvas>
+      <input type="button" onclick="drawCircle($('#canvas1')[0]);" value="clear">
+    </div>
+
+
+
+
+  <div  align="center" class="question">
+      <h2 id="testee">Please place an X in the triangle</h2>
+
+      <canvas id="canvas2"></canvas>
+      <input type="button" onclick="drawBoxes($('#canvas2')[0]);" value="clear" />
+      
+      
+      <h2 id="testee">Which of the above figures is largest?</h2>
+      <input id="q10b" name="q10b" type="text"/>
+  </div>
+
+
+
+
+  <div  align="center" class="question">
+    <h2 id="testee">I am going to tell you a story. Please listen carefully because afterwards, I'm going to ask you some questions about it.</h2>
+    <p>
+      <h2 id="testee"> Press play below to listen to the story </h2>
+  </div>
+
+
+
+
+  <div align="center" class="question"> 
+       <table id="testee">
+        <tr><td><h2>What was the female's name?</h2></td><td><input id="q11a" name="q11a" type="text" value=""></td></tr>
+        <tr><td><h2>When did she go back to work?</h2></td><td><input id="q11b" name="q11b" type="text" value=""></td></tr>
+        <tr><td><h2>What work did she do?</h2></td><td><input id="q11c" name="q11c" type="text" value=""></td></tr>
+        <tr><td><h2>What state did she live in?</h2></td><td><input id="q11d" name="q11d" type="text" value=""></td></tr>
+      </table>
+      <label>
+  </div>
+
+
+
+
+  <div align="center" class="question" id="testee">
+    Thank you for completing the test. The supervisor will now talk to you about the test you have done.
+  </div>
+
+
+
+
+  <div  align="center" class="question">
+    <input type="submit" onclick="saveCurrent();" value="save data in local database" />
+  </div>
+
+  <div  align="center" id="local_database">
+    <input type="submit" onclick="submitData();" value="submit via mail csv" />
+    <input type="submit" onclick="clearLocalData();" value="delete all data" />
+
+    <table border=1>
+      <thead>
+
+      </thead>
+      
+
+      <tbody>
+
+      </tbody>
+
+    </table>
+   </div>
+  
+
+
+
+  
+  <!--/form-->
+  </body>
+</html>

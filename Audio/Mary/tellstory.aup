@@ -1,0 +1,34 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="tellstory_data" version="1.3.0" audacityversion="2.0.6" sel0="0.0000000000" sel1="6.7370748299" vpos="0" h="0.0000000000" zoom="106.0231854839" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds">
+	<tags>
+		<tag name="TITLE" value="TASCAM_0182.mp3"/>
+		<tag name="ALBUM" value="TASCAM DR-40"/>
+	</tags>
+	<wavetrack name="TASCAM_0182" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="297105">
+				<waveblock start="0">
+					<simpleblockfile filename="e00007c7.au" len="262144" min="-0.084813" max="0.118094" rms="0.010334"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e000012c.au" len="34961" min="-0.018355" max="0.022622" rms="0.001369"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="TASCAM_0182" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="297105">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000329.au" len="262144" min="-0.105901" max="0.109422" rms="0.012699"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e000068e.au" len="34961" min="-0.01987" max="0.024781" rms="0.001614"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
