@@ -155,12 +155,7 @@
               p1 = p
             }else{
               ctx.beginPath();
-              if(mode=="erase") {
-                ctx.fillStyle = "#FFFFFF"; // Fill colour white
-              }
-              else { 
-                ctx.fillStyle = "#688Fc4";       
-              }
+              ctx.strokeStyle = "F00#"; // Line drawing colour
               ctx.moveTo(p1.x,p1.y);
               ctx.lineTo(p.x,p.y);
               ctx.stroke();
@@ -841,8 +836,8 @@
       
       <div class="wholepage">
         <div class="shapepage">
-        <h2 id="testee">Please place an X in the triangle</h2>
-        <h2 id="testee">Which of the above figures is largest?</h2>
+        <!--<h2 id="testee">Please place an X in the triangle</h2>
+        <h2 id="testee">Which of the above figures is largest?</h2> -->
         <div id="canvas2div"><canvas id="canvas2"></canvas></div>
         <div id="largestshape">
         <select id="largestshape">
