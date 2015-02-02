@@ -38,7 +38,7 @@
       }
       //Makes it work in Safari
       else {
-        return { x: e.pageX - currentDrawCanvas.offsetLeft, y: e.pageY - currentDrawCanvas.offsetTop };
+        return { x: e.pageX - currentDrawCanvas.offsetLeft -10, y: e.pageY - currentDrawCanvas.offsetTop };
       }
     }
 
@@ -509,8 +509,9 @@
 
       #canvas1div{
         position:absolute;
-        width:350px;
-        height:350px;
+        width:100%;
+        margin:auto;
+        right:0; left:0;
       }
 
       .drawheader{
@@ -523,7 +524,6 @@
       #canvas1 {
         position:absolute;
         margin:auto;
-        width:100%;
         right:0; left:0;
       }
 
