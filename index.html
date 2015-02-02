@@ -242,7 +242,7 @@
       console.log("Starttest worked")
       location.hash = "#p1";
       $(".wholepage").hide()//Hide previous page
-      $("#p20").show()  //Show next page
+      $("#p1").show()  //Show next page
     }
 
     function admintest(){
@@ -481,11 +481,12 @@
        font-family: Helvetica ;
        font-weight: bold ;
        padding: 15px; 
+       -webkit-appearance: none;
        }
 
        .guest {
        margin:auto;
-       width:50%
+       width:50%;
        }
 
       .admin{
@@ -776,8 +777,8 @@
       
       <div class="wholepage">
         <div class="question">
-        <h2 id="tester"> Please record the number of correct animals, Not Species, that they manage to recite</h2>
         <h2 id="testee">Please name as many animals as you can in one minute.</h2>
+        <h2 id="tester"> Please record the number of correct animals, Not Species, that they manage to recite</h2>       
         <input id="q6" name="q6" type="text" value=""/>     
         <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
         </div>
@@ -850,7 +851,7 @@
         <div id="canvas2div"><canvas id="canvas2"></canvas></div>
         <div id="largestshape">
         <select id="largestshape">
-                    <option value="">- Select a level of shape-</option>
+                    <option value="">- Select a shape-</option>
                     <option label="Square" value="">Square</option>
                     <option label="Triangle" value="">Triangle</option>
                     <option label="Circle" value="">Circle</option>
