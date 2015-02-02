@@ -38,7 +38,7 @@
       }
       //Makes it work in Safari
       else {
-        return { x: e.pageX - currentDrawCanvas.offsetLeft -10, y: e.pageY - currentDrawCanvas.offsetTop };
+        return { x: e.pageX - currentDrawCanvas.offsetLeft -10, y: e.pageY - currentDrawCanvas.offsetTop -150 };
       }
     }
 
@@ -556,6 +556,13 @@
         left:0; right:0;
       }
 
+      .drawheader{
+        position :absolute;
+        max-height: 150px;
+        margin:auto;
+        left:0; right:0;
+      }
+
       .buttontable {
         position:absolute;
         bottom:10px;
@@ -830,9 +837,10 @@
 
       <div class="wholepage">
         <div class="clockpage">
+          <div class="drawheader">
           <h2 id="testee"> This is a clock face <br>
             Please Draw the hour markers <br>
-            Please draw what the clock would look like at ten minutes to 11 o'clock   </h2>
+            Please draw what the clock would look like at ten minutes to 11 o'clock   </h2></div>
 
         <div id="canvas1div"><canvas id="canvas1"></canvas></div>        
         <table class="buttontable" align="center">
@@ -846,8 +854,9 @@
       
       <div class="wholepage">
         <div class="shapepage">
+          <div class="drawheader">
         <h2 id="testee">Please place an X in the triangle</h2>
-        <h2 id="testee">Which of the above figures is largest?</h2>
+        <h2 id="testee">Which of the above figures is largest?</h2></div>
         <div id="canvas2div"><canvas id="canvas2"></canvas></div>
         <div id="largestshape">
         <select id="largestshape">
