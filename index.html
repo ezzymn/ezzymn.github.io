@@ -195,14 +195,14 @@
 
      //Function. Draws circle on canvas
      function drawCircle(domElement){
-      $(domElement).attr("width", 450)
-      $(domElement).attr("height", 450)
+      $(domElement).attr("width", 400)
+      $(domElement).attr("height", 400)
 
       ctx = domElement.getContext("2d");
       
       ctx.clearRect(0, 0, domElement.width, domElement.height);
       ctx.strokeStyle = "black";
-      ctx.arc(domElement.width / 2, domElement.height / 2, 220 , 0, Math.PI * 2);
+      ctx.arc(domElement.width / 2, domElement.height / 2, 190 , 0, Math.PI * 2);
       ctx.stroke();
       if (ctx) {
         domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
@@ -424,7 +424,7 @@
       ctx.fillStyle = "#FFFFFF"; // Fill colour white
     }
     else { 
-      ctx.fillStyle = "#FF6347";       
+      ctx.fillStyle = "#688Fc4";       
     }
     ctx.beginPath();
     ctx.arc(x, y, size, 0, Math.PI*2, true); 
@@ -506,8 +506,8 @@
 
       #canvas1div{
         position:absolute;
-        width:450px;
-        height:450px;
+        width:400px;
+        height:400px;
         margin:auto;
         right:0; left:0;
       }
@@ -824,14 +824,14 @@
           <h2 id="testee"> This is a clock face <br>
             Please Draw the hour markers <br>
             Please draw what the clock would look like at ten minutes to 11 o'clock   </h2>
-        <div id="canvas1div"><canvas id="canvas1"></canvas></div>
-        </div>
+        <div id="canvas1div"><canvas id="canvas1"></canvas></div>        
         <table class="buttontable" align="center">
         <tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
         <td><input class="button" type="button" onclick="erase();" value="Eraser">   </td>
         <td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
         </table> 
-        <input type="submit" class="infosubmit" onclick="next();" value="Submit">  
+        <input type="submit" class="infosubmit" onclick="next();" value="Submit"> 
+      </div> 
       </div>
       
       <div class="wholepage">
