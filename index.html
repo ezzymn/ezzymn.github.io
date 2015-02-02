@@ -195,14 +195,14 @@
 
      //Function. Draws circle on canvas
      function drawCircle(domElement){
-      $(domElement).attr("width", 350)
-      $(domElement).attr("height", 350)
+      $(domElement).attr("width", 450)
+      $(domElement).attr("height", 450)
 
       ctx = domElement.getContext("2d");
       
       ctx.clearRect(0, 0, domElement.width, domElement.height);
       ctx.strokeStyle = "black";
-      ctx.arc(domElement.width / 2, domElement.height / 2, 236 , 0, Math.PI * 2);
+      ctx.arc(domElement.width / 2, domElement.height / 2, 220 , 0, Math.PI * 2);
       ctx.stroke();
       if (ctx) {
         domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
@@ -506,8 +506,8 @@
 
       #canvas1div{
         position:absolute;
-        width:473px;
-        height:473px;
+        width:450px;
+        height:450px;
         margin:auto;
         right:0; left:0;
       }
@@ -562,14 +562,6 @@
       padding: 15px; 
       width:90%;
       }
-
-      #canvas1 {
-        position: absolute;
-        width:30%;
-        left:0; right:0;
-        margin:auto;
-      }
-
 
       .infopage{
         position:absolute;
@@ -676,8 +668,7 @@
 
       <div class="wholepage">
         <div class="question">
-        <table align="center">       
-        <tr><td><h2>Highest level of Education</h2></td><td><td style="padding-right: 70px"></td></td><td>
+        <h2>Highest level of Education</h2>
         <select id="educationlevels">
                     <option value="">- Select a level of education-</option>
                     <option label="Primary" value="">Primary</option>
@@ -686,15 +677,13 @@
                     <option label="Masters" value="">Masters</option>
                     <option label="PhD" value="">PhD</option>
                     <option label="Other" value="">Other</option>
-        </select></td></tr>
-       </table>
+        </select>
         </div>
       </div>
 
       <div class="wholepage">
       <div class="question">
-      <table align="center">
-      <tr><td><h2>Level of Alertness</h2></td><td><td style="padding-right: 70px"></td></td><td><td>
+      <h2>Level of Alertness</h2>
       <select id="alertnesslevels">
                     <option value="">-Select the closest level of Alertness-</option>
                     <option label="Alert" value="Awake and able to focus"></option>
@@ -704,8 +693,7 @@
                     <option label="Inattentive" value="Inattentive"></option>
                     <option label="Preoccupied" value="Preoccupied"></option>
                     <option label="Unsure" value ="Unsure"></option> 
-      </select> </td></tr>
-      </table>
+      </select>
       </div>
       </div>
 
