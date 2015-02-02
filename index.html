@@ -202,7 +202,7 @@
       
       ctx.clearRect(0, 0, domElement.width, domElement.height);
       ctx.strokeStyle = "black";
-      ctx.arc(domElement.width / 2, domElement.height / 2, 175  , 0, Math.PI * 2);
+      ctx.arc(domElement.width / 2, domElement.height / 2, 236 , 0, Math.PI * 2);
       ctx.stroke();
       if (ctx) {
         domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
@@ -482,6 +482,7 @@
        font-weight: bold ;
        padding: 15px; 
        -webkit-appearance: none;
+       background-color: #8A929D;
        }
 
        .guest {
@@ -505,7 +506,8 @@
 
       #canvas1div{
         position:absolute;
-        width:50%;
+        width:473px;
+        height:473px;
         margin:auto;
         right:0; left:0;
       }
