@@ -155,7 +155,12 @@
               p1 = p
             }else{
               ctx.beginPath();
-              ctx.strokeStyle = "#F00"; // Line drawing colour
+              if(mode=="erase") {
+                ctx.fillStyle = "#FFFFFF"; // Fill colour white
+              }
+              else { 
+                ctx.fillStyle = "#688Fc4";       
+              }
               ctx.moveTo(p1.x,p1.y);
               ctx.lineTo(p.x,p.y);
               ctx.stroke();
@@ -796,7 +801,7 @@
       <div class="wholepage">
         <div class="question">
         <h2 id="testee"> If I say 87, you would say</h2>
-        <input id="q8a" name="q8a" type="text" value-""/>
+        <input id="q8a" name="q8a" type="number" value-""/>
         <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
         </div>
       </div>
@@ -804,7 +809,7 @@
       <div class="wholepage">
         <div class="question">
         <h2 id="testee"> If I say 659, you would say</h2>
-        <input id="q8b" name="q8b" type="text" value-""/>
+        <input id="q8b" name="q8b" type="number" value-""/>
         <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
         </div>
       </div>
@@ -812,7 +817,7 @@
       <div class="wholepage">
         <div class="question">
         <h2 id="testee"> If I say 8537, you would say</h2>
-        <input id="q8c" name="q8c" type="text" value-""/>
+        <input id="q8c" name="q8c" type="number" value-""/>
         <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
         </div>
       </div>
@@ -821,9 +826,9 @@
 
       <div class="wholepage">
         <div class="clockpage">
-          <h2 id="testee"> This is a clock face <br>
+         <!-- <h2 id="testee"> This is a clock face <br>
             Please Draw the hour markers <br>
-            Please draw what the clock would look like at ten minutes to 11 o'clock   </h2>
+            Please draw what the clock would look like at ten minutes to 11 o'clock   </h2> -->
         <div id="canvas1div"><canvas id="canvas1"></canvas></div>        
         <table class="buttontable" align="center">
         <tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
@@ -836,8 +841,8 @@
       
       <div class="wholepage">
         <div class="shapepage">
-        <h2 id="testee">Please place an X in the triangle</h2>
-        <h2 id="testee">Which of the above figures is largest?</h2>
+        <!--<h2 id="testee">Please place an X in the triangle</h2>
+        <h2 id="testee">Which of the above figures is largest?</h2> -->
         <div id="canvas2div"><canvas id="canvas2"></canvas></div>
         <div id="largestshape">
         <select id="largestshape">
@@ -872,7 +877,7 @@
       <div class="wholepage">
         <div class="question">
         <h2 id="testee">What was the female's name?</h2> 
-        <input id="q11a" name="q11a" type="number" value=""/>
+        <input id="q11a" name="q11a" type="text" value=""/>
         <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
         </div>
       </div>
@@ -880,7 +885,7 @@
       <div class="wholepage">
         <div class="question">
         <h2 id="testee">When did she go back to work?</h2> 
-        <input id="q11b" name="q11b" type="number" value=""/>
+        <input id="q11b" name="q11b" type="text" value=""/>
         <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
         </div>
       </div>
@@ -888,7 +893,7 @@
         <div class="wholepage">
         <div class="question">
         <h2 id="testee">What work did she do?</h2> 
-        <input id="q11c" name="q11c" type="number" value=""/>
+        <input id="q11c" name="q11c" type="text" value=""/>
         <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
         </div>
         </div>
@@ -896,7 +901,7 @@
         <div class="wholepage">
         <div class="question">
         <h2 id="testee">What state did she live in?</h2> 
-        <input id="q11d" name="q11d" type="number" value=""/>
+        <input id="q11d" name="q11d" type="text" value=""/>
         <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
         </div>
         </div>
