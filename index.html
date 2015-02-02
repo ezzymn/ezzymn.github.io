@@ -195,14 +195,23 @@
 
      //Function. Draws circle on canvas
      function drawCircle(domElement){
+<<<<<<< HEAD
       $(domElement).attr("width", 300)
       $(domElement).attr("height",300)
+=======
+      $(domElement).attr("width", 400)
+      $(domElement).attr("height", 400)
+>>>>>>> parent of 5047ddd... Revert "V1.1.3"
 
       ctx = domElement.getContext("2d");
       
       ctx.clearRect(0, 0, domElement.width, domElement.height);
       ctx.strokeStyle = "black";
+<<<<<<< HEAD
       ctx.arc(domElement.width / 2, domElement.height / 2, 145 , 0, Math.PI * 2);
+=======
+      ctx.arc(domElement.width / 2, domElement.height / 2, 190 , 0, Math.PI * 2);
+>>>>>>> parent of 5047ddd... Revert "V1.1.3"
       ctx.stroke();
       if (ctx) {
         domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
@@ -424,7 +433,7 @@
       ctx.fillStyle = "#FFFFFF"; // Fill colour white
     }
     else { 
-      ctx.fillStyle = "#FF6347";       
+      ctx.fillStyle = "#688Fc4";       
     }
     ctx.beginPath();
     ctx.arc(x, y, size, 0, Math.PI*2, true); 
@@ -506,6 +515,7 @@
 
       #canvas1div{
         position:absolute;
+<<<<<<< HEAD
         width:350px;
         top:165px;
         height:350px;
@@ -516,6 +526,11 @@
         position:absolute;
         height:250px;
         width:100%;
+=======
+        width:400px;
+        height:400px;
+        margin:auto;
+>>>>>>> parent of 5047ddd... Revert "V1.1.3"
         right:0; left:0;
         margin:auto;
       }
@@ -834,15 +849,20 @@
           <h2 id="testee"> This is a clock face <br>
             Please Draw the hour markers <br>
             Please draw what the clock would look like at ten minutes to 11 o'clock   </h2>
+<<<<<<< HEAD
           </div>
         <div id="canvas1div"><canvas id="canvas1"></canvas></div>
         </div>
+=======
+        <div id="canvas1div"><canvas id="canvas1"></canvas></div>        
+>>>>>>> parent of 5047ddd... Revert "V1.1.3"
         <table class="buttontable" align="center">
         <tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
         <td><input class="button" type="button" onclick="erase();" value="Eraser">   </td>
         <td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
         </table> 
-        <input type="submit" class="infosubmit" onclick="next();" value="Submit">  
+        <input type="submit" class="infosubmit" onclick="next();" value="Submit"> 
+      </div> 
       </div>
       
       <div class="wholepage">
