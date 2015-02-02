@@ -202,7 +202,7 @@
       
       ctx.clearRect(0, 0, domElement.width, domElement.height);
       ctx.strokeStyle = "black";
-      ctx.arc(512, 567, 145 , 0, Math.PI * 2);
+      ctx.arc(domElement.width / 2, domElement.height / 2, 145 , 0, Math.PI * 2);
       ctx.stroke();
       if (ctx) {
         domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
@@ -507,9 +507,17 @@
       #canvas1div{
         position:absolute;
         width:350px;
+        top:350px;
         height:350px;
-        margin:auto;
+        left:674px;
+      }
+
+      .drawheader{
+        position:absolute;
+        height:250px;
+        width:100%;
         right:0; left:0;
+        margin:auto;
       }
 
       #canvas1 {
@@ -822,9 +830,11 @@
 
       <div class="wholepage">
         <div class="clockpage">
+          <div class="drawheader">
           <h2 id="testee"> This is a clock face <br>
             Please Draw the hour markers <br>
             Please draw what the clock would look like at ten minutes to 11 o'clock   </h2>
+          </div>
         <div id="canvas1div"><canvas id="canvas1"></canvas></div>
         </div>
         <table class="buttontable" align="center">
