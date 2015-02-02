@@ -1,979 +1,827 @@
 <!-- Updates needed go here -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width,user-scalable=no">  <!-- Prevents Scaling -->
- <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Allows full screen on web browser -->
- <meta name="format-detection" content="telephone=no"> <!-- Removes Phone Number Linking -->
- <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> <!-- Source file of the jquery database -->
-
- <!-- Sets the title of the page -->
- <title>CUPDE Testing</title> 
-
-
-
-
- <!-- Sets the between scripts to be javascript language -->
- <script type="text/javascript">
-
-    //List of All variables used
-    var p1; //Coordinates for location on the application canvas that has been touched.
-    var currentDrawCanvas; //Current canvas.
-    var ctx; //Drawing canvas.
-    var responses = [];//Array to hold all the responses.
-    var mouseX;
-    var mouseY;
-
-    //Function. Used by moveEventFunction. Gets co-ordinate of touch
-    function getCoords(e) {
-      // Makes it work in Chrome / Safari (except on iPad/iPhone)
-      if (e.offsetX) {        
-        return { x: e.offsetX, y: e.offsetY };
-      }
-      // Makes it work in Firefox
-      else if (e.layerX) {
-        return { x: e.layerX, y: e.layerY };
-      }
-      //Makes it work in Safari
-      else {
-        return { x: e.pageX - currentDrawCanvas.offsetLeft, y: e.pageY - currentDrawCanvas.offsetTop };
-      }
-    }
-
-     // Function. Prevents scrolling past screen 
-    function BlockMove(event) {
-      event.preventDefault() ;
-       }
-
-    // Function. Clears all local data stored after confirm
-    function clearLocalData(){
-      if(confirm("really?")){
-        localStorage.setItem("all_items", "[]");
-        localStorage.setItem("current_item", "[]");
-        seeDatabase();
-      }
-    }
-
-    //Function. Emails data 
-    function submitData(){
-      mail = "chihchun_chen@yahoo.co.uk"
-      subject = encodeURIComponent("SLUMSData")
-      var keys = []
-      var content = ""
-      $("input,select").each(function(i,e){
-        if($(e).attr("name")){
-          name = $(e).attr("name")            
-          keys.push(name)
-          content += name + ","
-        }
-      });
-      content += "\n"
-      if(localStorage.getItem("all_items")){
-        var allAnswers = JSON.parse(localStorage.getItem("all_items"))
-        for(a=0;a<allAnswers.length;a++){
-          var line = ""
-          for(i=0;i<keys.length;i++){
-            var val = allAnswers[a][keys[i]]
-            line += val + ","
-          }
-          line += "\n"
-          content += line
-        }
-      }
-
-      body = encodeURIComponent(content);
-      window.location.href = "mailto:"+mail+"?subject="+subject+"&body="+body
-    }
-
-
-    //Function. Displays the database 
-    function seeDatabase(){
-      $(".wholepage").hide()
-      $("#local_database").show()
-      var tr = $("<tr></tr>")
-      $("thead").html("").append(tr)
-      var keys = []
-      $("input,select").each(function(i,e){
-        if($(e).attr("name")){
-          //console.log(i,e)
-          name = $(e).attr("name")            
-          keys.push(name)
-          tr.append("<th>"+name+"</th>")
-        }
-      });
-
-      if(localStorage.getItem("all_items")){
-        var allAnswers = JSON.parse(localStorage.getItem("all_items"))
-        for(a=0;a<allAnswers.length;a++){
-          var tr = $("<tr></tr>")
-          $("tbody").append(tr)
-          for(i=0;i<keys.length;i++){
-            var val = allAnswers[a][keys[i]]
-            tr.append("<td>"+val+"</td>");
-          }
-        }
-      }
-    }
-
-    //Function. Saves all answers in the database
-    function saveCurrent(){
-
-      if(!jQuery.isEmptyObject(currentQuestion)){
-
-        if(localStorage.getItem("all_items")){
-          var allAnswers = JSON.parse(localStorage.getItem("all_items"))
-          console.log("Loaded current objects:", currentQuestion)
-        }
-        else{
-          var allAnswers = [];
-        }
-
-        allAnswers.push(currentQuestion);
-        localStorage.setItem("all_items", JSON.stringify(allAnswers));       
-        currentQuestion = {};
-        alert("results saved in db.")
-        location.hash = "#p0";
-        location.reload();
-      }
-      seeDatabase();
-    }
-
-    //Function. Sets p1 to initial touch point
-    function moveEventFunction(e) {
-
-      if(currentDrawCanvas){
-        ctx = currentDrawCanvas.getContext("2d");  
-
-        // Does the line drawing
-        if (e.touches) {
-          for (var i = 1; i <= e.touches.length; i++) {
-            var p = getCoords(e.touches[i - 1]); // Get info for finger i
-            console.log(p.x,p.y)
-            if(!p1){
-              p1 = p
-            }else{
-              ctx.beginPath();
-              ctx.strokeStyle = "#F00"; // Line drawing colour
-              ctx.moveTo(p1.x,p1.y);
-              ctx.lineTo(p.x,p.y);
-              ctx.stroke();
-              p1 = p;              
-            }
-          }
-        }
-      }
-      else {
-        sketchpad_mouseMove(e);
-      }            
-      return false; // Stop event bubbling up and doing other stuff (like pinch zoom or scroll)
-    }
-
-    // Function. Mouse position relative to top left 
-    function getMousePos(e) {
-      if (!e)
-        var e = event;
-      if (e.offsetX) {
-        mouseX = e.offsetX;
-        mouseY = e.offsetY;
-        console.log("offsetX: " + mouseX)
-        console.log("offsetY: " + mouseY)            
-      }
-      else if (e.layerX) {
-        console.log("layerX: " + mouseX)
-        console.log("layerY: " + mouseY)
-        mouseX = e.layerX;
-        mouseY = e.layerY;
-      }
-    }
-
-    //Function. Adds mouse coords to array of coords
-    function recordClockCoords(coords) {
-      p8.append(coords);
-      }
-
-     //Function. Draws circle on canvas
-     function drawCircle(domElement){
-<<<<<<< HEAD
-      $(domElement).attr("width", 300)
-      $(domElement).attr("height",300)
-=======
-      $(domElement).attr("width", 400)
-      $(domElement).attr("height", 400)
->>>>>>> parent of 5047ddd... Revert "V1.1.3"
-
-      ctx = domElement.getContext("2d");
-      
-      ctx.clearRect(0, 0, domElement.width, domElement.height);
-      ctx.strokeStyle = "black";
-<<<<<<< HEAD
-      ctx.arc(domElement.width / 2, domElement.height / 2, 145 , 0, Math.PI * 2);
-=======
-      ctx.arc(domElement.width / 2, domElement.height / 2, 190 , 0, Math.PI * 2);
->>>>>>> parent of 5047ddd... Revert "V1.1.3"
-      ctx.stroke();
-      if (ctx) {
-        domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
-        domElement.addEventListener('mousemove', sketchpad_mouseMove, false);
-        window.addEventListener('mouseup', sketchpad_mouseUp, true);
-      }
-    }
-
-    //Function. Draws box on canvas
-    function drawBoxes(domElement){
-      console.log("drawBoxes")
-      $(domElement).attr("width", 650)
-      $(domElement).attr("height", 210)
-      ctx=domElement.getContext("2d");
-      ctx.clearRect(0, 0, domElement.width, domElement.height);
-      //Draws the square
-      ctx.strokeRect(1,1,200,200);
-      var d = 500;
-      //Draws the rectangle
-      ctx.strokeRect(1+d,1,100,200);
-      var tX = 350;
-      ctx.beginPath();
-      ctx.moveTo(tX,1);
-      //Draws the triangle
-      ctx.lineTo(tX+100,200);
-      ctx.lineTo(tX-100,200);
-      ctx.lineTo(tX,1);
-      ctx.stroke();
-      if (ctx) {
-        domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
-        domElement.addEventListener('mousemove', sketchpad_mouseMove, false);
-        window.addEventListener('mouseup', sketchpad_mouseUp, true);
-      }
-    }
-
-    function starttest(){
-      console.log("Starttest worked")
-      location.hash = "#p1";
-      $(".wholepage").hide()//Hide previous page
-      $("#p1").show()  //Show next page
-    }
-
-    function admintest(){
-      console.log("Admintest worked")
-      location.hash = "#p0";
-    }
-
-    function next(){
-      console.log(location.hash)
-      var tonext=location.hash;
-      tonext = tonext.replace(/[^0-9\.]+/g, "");
-      console.log(tonext)
-      one=1;
-      tonext++;
-      console.log("We clicked the button")
-      console.log(tonext)
-      location.hash="#p"+tonext
-      $(".wholepage").hide()//Hide previous page
-      $("#p"+tonext).show()  //Show next page
-    }
-
-
-    if(localStorage.getItem("current_item")){
-      var currentQuestion = JSON.parse(localStorage.getItem("current_item"))
-      console.log("Loaded current object:", currentQuestion)
-    }else{
-      console.log("No current object.")
-      var currentQuestion = {};
-    }
-
-    //Attaches the event handler 'touchmove' to the document.
-    $(document).bind('touchmove', false);
-
-    //Holds off function execution till DOM completely loaded.
-    $(document).ready(function(){
-
-      $("input, select").change(function(evt){
-
-        currentQuestion[evt.target.name] = evt.target.value;
-        localStorage.setItem("current_item", JSON.stringify(currentQuestion));
-        console.log("saved:", currentQuestion)
-      });
-
-
-    //Function. Applies next button to all question class
-    $(".wholepage").each(function(i,e){
-        $(e).attr("id","p"+i)
-
-        //The 'Next' button
-       if (i<2) {
-        var btn = $('<input type="button" class="hide" value="Next">'); //Creates 
-        } else if (i<6) {
-        var btn = $('<input type="button" class="next" value="Submit">');
-        } else{
-        var btn = $('<input type="button" class="hide" value="Next">'); 
-        } //the 'Next' button 
-        console.log(i) // Writes to console what page we are on DEBUG
-        btn.attr("data-to",i+1) //'Next' Button associated with next page (question)
-        btn.attr("data-id",i) //Let the 'Next' button know what page (question) it's currently on.
-
-        /* Not a clue. dont think its needed
-        if (i===15) {
-            downloadCanvas("canvas1", "firstattempt.png")
-            console.log("We tried to download")
-            console.log(i)
-        }
-        */
-
-        //Binds the event handler 'click' to the event where the 'Next' button is clicked.
-        btn.bind('click', function(ev){
-          var toId = $(ev.target).data("to")
-          $(".wholepage").hide()//Hide previous page
-          $("#p"+toId).show()  //Show next page
-          location.hash = "#p"+toId //Moves to next page.
-        });
-        $(e).append(btn) //'Next' button now listens for events
-
-       /* //The 'Previous' button DEBUG
-
-        if (i<7) {
-        var btn3 = $('<input type="button" class="hide" value="Previous">'); //Creates 
-        } else {
-        var btn3 = $('<input type="button" class="previous" value="Back">')}; //the 'Previous' button 
-        btn3.attr("data-to",i-1) //'Previous' Button associated with Previous page (question).          
-        btn3.attr("data-id",i) //Let the 'Previous' button know what page (question) it's currently on.
-        //Binds the event handler 'click' to the event where the 'Previous' button is clicked.
-        btn3.bind('click', function(ev){
-          var toprev = $(ev.target).data("to")         
-          $(".wholepage").hide()//Hide previous page
-          $("#p"+toprev).show()  //Show next page
-          location.hash = "#p"+toprev //Moves to next page.
-        });
-        $(e).append(btn3) //'Previous' button now listens for events */
-
-        /*The 'Start over' button
-        if (i<7) {
-        var btn2 = $('<input type="button" class="hide" value="Start Over">'); //Creates 
-        } else {
-        var btn2 = $('<input type="button" class="over" value="over">')}; //the 'Start Over' button 
-        //Binds the event handler 'click' to the event where the 'Start over' button is clicked.
-        btn2.bind('click', function(ev){
-          //Display a pop-up box that asks user to confirm action
-          if(confirm("really start over?")){            
-            location.hash = "#p0"; //Reset the page (question) number
-            location.reload();  //Reload the page.
-          }
-        });
-        $(e).append(btn2) //'Start over' button now listens for events (i.e. detects when it is clicked) */
-    });
-
-
-    //Logs the page identifier, unless empty then set to q0
-    if(location.hash){
-      console.log(location.hash)
-      var hId = location.hash
-      }else{
-     var hId = "#p0"
-     }
-    //Display the question identifier
-    $(hId).show()
-
-    //Draws circle on 'canvas1'
-    var can = document.getElementById("canvas1");
-    drawCircle(can);
-    //When canvas1 is touched, associate it wth currentDrawCanvas so we know it is now available to act on.
-    can.ontouchstart = function(e){
-      currentDrawCanvas = document.getElementById("canvas1");
-    }
-    can.onmousedown = function(e){
-      currentDrawCanvas = document.getElementById("canvas1");
-    }
-    //Handle different types of input.  
-    can.ontouchmove = moveEventFunction; //Associates touch with moveEventFunction.
-    can.onmousemove = moveEventFunction; //Associates mouse movement with moveEventFunction.      
-    //When canvas interaction has ended, no more cooordinates recorded.
-    can.ontouchend = function(e){
-        //Resets p1
-        p1 = null;
-      };
-      can.onmouseup = function(e) {
-        mouseDown = 0;
-        p1 = null;
-      }
-      mouseDown = 0;
-
-
-    //Draws boxes on 'canvas2'
-    var can2 = document.getElementById("canvas2");
-    drawBoxes(can2);
-    //When canvas2 is touched, associate it with currentDrawCanvas so we know it is available to act on.
-    can2.ontouchstart = function(e){
-      currentDrawCanvas = document.getElementById("canvas2");
-    }
-    can2.onmousedown = function(e) {
-      currentDrawCanvas = document.getElementById("canvas2");
-    }
-    //Handle different types of input.  
-    can2.ontouchmove = moveEventFunction; //Associates touch with moveEventFunction.
-    can2.onmousemove = moveEventFunction; //Associates mouse movement with moveEventFunction.      
-    //When canvas interaction has ended, no more cooridnates recorded.
-    can2.ontouchend = function(e){
-      //Resets p1
-      p1 = null;
-    };
-    can2.onmouseup = function(e) {
-      mouseDown = 0;
-      p1 = null;
-    }
-  });
-
-
-
-
-
-    //Function. Draws on the Canvas
-    var mode = "pen"
-    function drawDot(ctx,x,y,size,e) {     
-      if(mode=="erase") {
-      ctx.fillStyle = "#FFFFFF"; // Fill colour white
-    }
-    else { 
-      ctx.fillStyle = "#688Fc4";       
-    }
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, Math.PI*2, true); 
-    ctx.closePath();
-    ctx.fill();
-  } 
-
-    //Sets the function to erase
-    function erase() {
-      mode = "erase";
-      console.log("eraser selected")
-      size = 5;
-    }
-    //Sets the function to pen
-    function pen() {
-      mode = "pen";
-      size = 2;
-      console.log("pen selected")
-    }
-   // Keep track of the mouse button being pressed and draw a dot at current location
-   function sketchpad_mouseDown() {
-    mouseDown=1;
-    drawDot(ctx,mouseX,mouseY,size, e);
-  }
-
-    // Keep track of the mouse button being released
-    function sketchpad_mouseUp() {
-      mouseDown=0;
-    }
-
-    // Keep track of the mouse position and draw a dot if mouse button is currently pressed
-    function sketchpad_mouseMove(e) { 
-        // Update the mouse co-ordinates when moved
-        getMousePos(e);
-
-        // Draw a dot if the mouse button is currently being pressed
-        if (mouseDown==1) {
-          drawDot(ctx,mouseX,mouseY,size,e);
-        }
-      }
-      </script>
-
-      <!-- Start the CSS language -->
-      <style>
-      *{
-        font-family:"Times New Roman";
-      }
-
-      /*div {
-        background-color: #A0B8C8;
-      } */
-
-      input,select {
-       font-family: Helvetica ;
-       font-weight: bold ;
-       padding: 15px; 
-       -webkit-appearance: none;
-       background-color: #8A929D;
-       }
-
-       .guest {
-       margin:auto;
-       width:50%;
-       }
-
-      .admin{
-      font-family: Helvetica ;
-      font-weight: bold ; 
-      padding: 15px; 
-      width:50%;
-
-      }
-
-       .wholepage {
-        position: relative;
-        min-height: 100%;
-        min-width: 100%;
-      }
-
-      #canvas1div{
-        position:absolute;
-<<<<<<< HEAD
-        width:350px;
-        top:350px;
-        height:350px;
-        left:674px;
-      }
-
-      .drawheader{
-        position:absolute;
-        height:250px;
-        width:100%;
-=======
-        width:400px;
-        height:400px;
-        margin:auto;
->>>>>>> parent of 5047ddd... Revert "V1.1.3"
-        right:0; left:0;
-        margin:auto;
-      }
-
-      #canvas1 {
-        position:absolute;
-        margin:auto;
-        width:100%;
-        right:0; left:0;
-      }
-
-      #canvas2 {
-        position:absolute;
-        margin:auto;
-        right:0; left:0;
-      }
-      #canvas2div{
-        position:absolute;
-        width:100%;
-        margin:auto;
-        right:0; left:0;
-      }
-
-      .shapepage{
-        position:absolute;
-        height:100%;
-        width:100%;
-        text-align: center;
-        margin: auto;
-        right: 0; left:0;
-      }
-
-      #largestshape {
-        position:absolute;
-        bottom:20%;
-        width:50%;
-        margin:auto;
-        left:0; right:0;
-      }
-
-      .buttontable {
-        position:absolute;
-        bottom:10px;
-        width: 50%;
-        margin:auto;
-        left:0; right:0;
-      }
-
-      .button {
-      font-family: Helvetica ;
-      font-weight: bold ; 
-      padding: 15px; 
-      width:90%;
-      }
-
-      .infopage{
-        position:absolute;
-        top:30%;
-        width:80%;
-        text-align: center;
-        margin:auto;
-        right:0; left:0;
-      }
-
-      .clockpage{
-        position:absolute;
-        height:100%;
-        width:100%;
-        text-align: center;
-        margin: auto;
-        right: 0; left:0;
-      }
-
-      .wrapper{
-        position: absolute;
-        top: 20%;
-        width: 50%;
-        text-align: center;
-        right: 0; left: 0;
-        margin:auto;
-      }
-
-      .hide {
-        display:none;
-      }
-
-      .infosubmit,.next{
-        position:absolute;
-        bottom:10px;
-        right:5px;
-      }
-
-
-      .question{
-        position: absolute;
-        top:30%;
-        width:100%;
-        text-align: center;
-        right:0; left:0;
-        margin:auto;
-      }
-
-      .titlepage{
-        margin:auto; 
-      }
-
-      html,body {
-        background-color: #A0B8C8;
-        height:100%;
-        width:100%;
-      }
-
-      table{
-        text-align: center;
-      }
-
-      </style>
-    </head>
-
-
-    <!-- Back to HTML Language -->
-    <body ontouchmove="BlockMove(event);">
-      <div class="wholepage">
-        <div class="wrapper">
-        <div class="titlepage">
-          <h1> Cambridge University Paper to Digital Equivalence Testing </h1>
-        </div>
-        <input type="submit" class="guest" onclick="starttest();" value="Guest User">
-        <div><br></div>
-        <input type="submit" class="admin" onclick="admintest();" value="Admin">
-      </div>
-      </div>
-    
-
-      <div class="wholepage">
-        <div class="infopage">
-          This is an initial application designed to investigate whether mobile devices are suitable to adminster apps which affect mental health. This is NOT a screening test for dementia. We are not qualified to diagnose dementia, nor are we trying to. We are using the St Loius University Mental Status Exams (SLUMS) as an example of such a test. If you wish to participate in the study, please press continue.
-        </div>
-        <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-
-      <div class="wholepage">
-        <div class="question" title="details">
-          <table align="center">
-            <tr><td><h2>First name</h2></td><td><td style="padding-right: 70px"></td></td><td><input id="first_name" name="first_name" type="text" value=""/></tr>
-            <tr><td><h2>Surname</h2></td><td style="padding-right: 70px"><td></td><td><input id="surname" name="surname" type="text" value=""/></tr>
-          </table>
-        </div>
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-        <table align="center">
-        <tr><td style="padding-right: 100px"><h2>Age</h2></td><td><input id = "age" name="age" type="number" value=""/></td></tr>
-        <tr><td style="padding-right: 100px"><h2>Date of birth</h2></td><td><input id="dob" name="dob" type="date" value=""></td></tr>
-        </table>
-        </div>
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-        <h2>Highest level of Education</h2>
-        <select id="educationlevels">
-                    <option value="">- Select a level of education-</option>
-                    <option label="Primary" value="">Primary</option>
-                    <option label="Secondary" value="">Secondary</option>
-                    <option label="University" value="">University</option>
-                    <option label="Masters" value="">Masters</option>
-                    <option label="PhD" value="">PhD</option>
-                    <option label="Other" value="">Other</option>
-        </select>
-        </div>
-      </div>
-
-      <div class="wholepage">
-      <div class="question">
-      <h2>Level of Alertness</h2>
-      <select id="alertnesslevels">
-                    <option value="">-Select the closest level of Alertness-</option>
-                    <option label="Alert" value="Awake and able to focus"></option>
-                    <option label="Drowsy" value="Drowsy"></option>
-                    <option label="Confused" value="Confused"></option>
-                    <option label="Distractable" value="Distractable"></option>
-                    <option label="Inattentive" value="Inattentive"></option>
-                    <option label="Preoccupied" value="Preoccupied"></option>
-                    <option label="Unsure" value ="Unsure"></option> 
-      </select>
-      </div>
-      </div>
-
-      <div class="wholepage">
-        <div class="infopage">
-         The following pages will ask you questions about your memory. It is not a test that you can fail, but is merely a tool to check the amount of memory you have, such as a thermometer measures your temperature. 
-       </div>
-       <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-          <h2 id="testee">  What day of the week is it? </h2>
-          <div><br></div>
-          <input id="q1" name="q1" type="text" value=""/>
-          <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-      </div>
-
-      <div class="wholepage">
-      <div class="question">     
-      <h2 id="testee">What is the year?</h2> 
-      <div><br></div>
-      <input id="q2" name="q2" type="number" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-      </div>
-      </div>
-      
-      <div class="wholepage">     
-         <div class="question">
-         <h2 id="testee">What county are we in?</h2>
-         <div><br></div>
-      <input id="q3" name="q3" type="text" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-
-        </div>
-      </div>
-
-      <div class="wholepage">
-        <div class="infopage">
-        <h2 id="testee">Please remember these five objects. I will ask you what they are later.</h2></p>
-        <ul id="testee">
-        <li>Apple</li>
-        <li>Pen</li>
-        <li>Tie</li>
-        <li>House</li>
-        <li>Car</li>
-      </ul>
-      </div>
-      <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-          <h2 id="testee">You have $100 and you go to the store and buy a dozen apples for $3 and a tricyle for $20.</h2>
-      <h2 id="testee">How much did you spend?</h2>
-      <div><br></div>
-      <input id="q5a" name="q5a" type="text" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-      </div>
-      </div>
-
-      <div class="wholepage">
-      <div class="question">
-      <h2 id="testee">How much do you have left?</h2>
-       <div><br></div>
-      <input id="q5b" name="q5b" type="text" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-      </div>
-      </div>
-      
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">Please name as many animals as you can in one minute.</h2>
-        <h2 id="tester"> Please record the number of correct animals, Not Species, that they manage to recite</h2>       
-        <input id="q6" name="q6" type="text" value=""/>     
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-      </div>
-
-      
-      <div class="wholepage">
-      <div class="question">
-      <h2 id="testee">What were the five objects I asked you to remember?</h2></p>
-      <div><br></div>
-      <input id="q7" name="q7" type="text" value="" />  
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">  
-      </div>
-      </div>
-
-
-      <div class="wholepage">
-        <div class="infopage">
-        <h2 id="testee">I'm going to give you a series of numbers and I would like you to give them to me backwards. For Example, if I say 42, you would say 24.</h2>
-        </div>
-        <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-
-
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee"> If I say 87, you would say</h2>
-        <input id="q8a" name="q8a" type="text" value-""/>
-        <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
-        </div>
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee"> If I say 659, you would say</h2>
-        <input id="q8b" name="q8b" type="text" value-""/>
-        <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
-        </div>
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee"> If I say 8537, you would say</h2>
-        <input id="q8c" name="q8c" type="text" value-""/>
-        <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
-        </div>
-      </div>
-
-
-
-      <div class="wholepage">
-        <div class="clockpage">
-          <div class="drawheader">
-          <h2 id="testee"> This is a clock face <br>
-            Please Draw the hour markers <br>
-            Please draw what the clock would look like at ten minutes to 11 o'clock   </h2>
-<<<<<<< HEAD
-          </div>
-        <div id="canvas1div"><canvas id="canvas1"></canvas></div>
-        </div>
-=======
-        <div id="canvas1div"><canvas id="canvas1"></canvas></div>        
->>>>>>> parent of 5047ddd... Revert "V1.1.3"
-        <table class="buttontable" align="center">
-        <tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
-        <td><input class="button" type="button" onclick="erase();" value="Eraser">   </td>
-        <td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
-        </table> 
-        <input type="submit" class="infosubmit" onclick="next();" value="Submit"> 
-      </div> 
-      </div>
-      
-      <div class="wholepage">
-        <div class="shapepage">
-        <h2 id="testee">Please place an X in the triangle</h2>
-        <h2 id="testee">Which of the above figures is largest?</h2>
-        <div id="canvas2div"><canvas id="canvas2"></canvas></div>
-        <div id="largestshape">
-        <select id="largestshape">
-                    <option value="">- Select a shape-</option>
-                    <option label="Square" value="">Square</option>
-                    <option label="Triangle" value="">Triangle</option>
-                    <option label="Circle" value="">Circle</option>
-        </select>
-      </div>
-        <table class="buttontable" align="center">
-        <tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
-        <td><input class="button" type="button" onclick="erase();" value="Eraser">   </td>
-        <td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
-        </table> 
-        <input type="submit" class="infosubmit" onclick="next();" value="Submit">
-        </div>
-             </div>
-
-      <div class="wholepage">
-        <div class="infopage">
-        <h2 id="testee">I am going to tell you a story. Please listen carefully because afterwards, I'm going to ask you some questions about it.</h2></div>
-        <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-
-      <div class="wholepage">
-        <div class="infopage">
-        <h2 id="testee"> Please listen to the story </h2>
-        </div>
-        <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-      
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">What was the female's name?</h2> 
-        <input id="q11a" name="q11a" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">When did she go back to work?</h2> 
-        <input id="q11b" name="q11b" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-      </div>
-
-        <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">What work did she do?</h2> 
-        <input id="q11c" name="q11c" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-        </div>
-
-        <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">What state did she live in?</h2> 
-        <input id="q11d" name="q11d" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-        </div>
-      
-      <div class="wholepage">
-        <div class="infopage">
-        Thank you for completing the test. The supervisor will now talk to you about the test you have done.
-        </div>
-      </div>
-
-
-    </body>
-    </head>
-    </html>
-
-<!-- Things that have come accross which may be useful
-
-
-You'll also want to disable the body and document from scrolling horizontally:
-
-body, html
-{    
-    overflow-x: hidden;        
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,user-scalable=no"> <!-- Prevents Scaling -->
+<meta name="apple-mobile-web-app-capable" content="yes"> <!-- Allows full screen on web browser -->
+<meta name="format-detection" content="telephone=no"> <!-- Removes Phone Number Linking -->
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> <!-- Source file of the jquery database -->
+<!-- Sets the title of the page -->
+<title>CUPDE Testing</title>
+<!-- Sets the between scripts to be javascript language -->
+<script type="text/javascript">
+//List of All variables used
+var p1; //Coordinates for location on the application canvas that has been touched.
+var currentDrawCanvas; //Current canvas.
+var ctx; //Drawing canvas.
+var responses = [];//Array to hold all the responses.
+var mouseX;
+var mouseY;
+//Function. Used by moveEventFunction. Gets co-ordinate of touch
+function getCoords(e) {
+// Makes it work in Chrome / Safari (except on iPad/iPhone)
+if (e.offsetX) {
+return { x: e.offsetX, y: e.offsetY };
 }
-
-<!-- <!DOCTYPE html>    INNER HTML
-<html>
-<body>
-
-<p id="myP">I am a paragraph.</p>
-
-<p>Click the button get the HTML content of the p element.</p>
-
-<button onclick="myFunction()">Try it</button>
-
-<p id="demo"></p>
-
-<script>
-function myFunction() {
-    var x = document.getElementById("myP").innerHTML;
-    document.getElementById("demo").innerHTML = x;
+// Makes it work in Firefox
+else if (e.layerX) {
+return { x: e.layerX, y: e.layerY };
+}
+//Makes it work in Safari
+else {
+return { x: e.pageX - currentDrawCanvas.offsetLeft, y: e.pageY - currentDrawCanvas.offsetTop };
+}
+}
+// Function. Prevents scrolling past screen
+function BlockMove(event) {
+event.preventDefault() ;
+}
+// Function. Clears all local data stored after confirm
+function clearLocalData(){
+if(confirm("really?")){
+localStorage.setItem("all_items", "[]");
+localStorage.setItem("current_item", "[]");
+seeDatabase();
+}
+}
+//Function. Emails data
+function submitData(){
+mail = "chihchun_chen@yahoo.co.uk"
+subject = encodeURIComponent("SLUMSData")
+var keys = []
+var content = ""
+$("input,select").each(function(i,e){
+if($(e).attr("name")){
+name = $(e).attr("name")
+keys.push(name)
+content += name + ","
+}
+});
+content += "\n"
+if(localStorage.getItem("all_items")){
+var allAnswers = JSON.parse(localStorage.getItem("all_items"))
+for(a=0;a<allAnswers.length;a++){
+var line = ""
+for(i=0;i<keys.length;i++){
+var val = allAnswers[a][keys[i]]
+line += val + ","
+}
+line += "\n"
+content += line
+}
+}
+body = encodeURIComponent(content);
+window.location.href = "mailto:"+mail+"?subject="+subject+"&body="+body
+}
+//Function. Displays the database
+function seeDatabase(){
+$(".wholepage").hide()
+$("#local_database").show()
+var tr = $("<tr></tr>")
+$("thead").html("").append(tr)
+var keys = []
+$("input,select").each(function(i,e){
+if($(e).attr("name")){
+//console.log(i,e)
+name = $(e).attr("name")
+keys.push(name)
+tr.append("<th>"+name+"</th>")
+}
+});
+if(localStorage.getItem("all_items")){
+var allAnswers = JSON.parse(localStorage.getItem("all_items"))
+for(a=0;a<allAnswers.length;a++){
+var tr = $("<tr></tr>")
+$("tbody").append(tr)
+for(i=0;i<keys.length;i++){
+var val = allAnswers[a][keys[i]]
+tr.append("<td>"+val+"</td>");
+}
+}
+}
+}
+//Function. Saves all answers in the database
+function saveCurrent(){
+if(!jQuery.isEmptyObject(currentQuestion)){
+if(localStorage.getItem("all_items")){
+var allAnswers = JSON.parse(localStorage.getItem("all_items"))
+console.log("Loaded current objects:", currentQuestion)
+}
+else{
+var allAnswers = [];
+}
+allAnswers.push(currentQuestion);
+localStorage.setItem("all_items", JSON.stringify(allAnswers));
+currentQuestion = {};
+alert("results saved in db.")
+location.hash = "#p0";
+location.reload();
+}
+seeDatabase();
+}
+//Function. Sets p1 to initial touch point
+function moveEventFunction(e) {
+if(currentDrawCanvas){
+ctx = currentDrawCanvas.getContext("2d");
+// Does the line drawing
+if (e.touches) {
+for (var i = 1; i <= e.touches.length; i++) {
+var p = getCoords(e.touches[i - 1]); // Get info for finger i
+console.log(p.x,p.y)
+if(!p1){
+p1 = p
+}else{
+ctx.beginPath();
+ctx.strokeStyle = "#F00"; // Line drawing colour
+ctx.moveTo(p1.x,p1.y);
+ctx.lineTo(p.x,p.y);
+ctx.stroke();
+p1 = p;
+}
+}
+}
+}
+else {
+sketchpad_mouseMove(e);
+}
+return false; // Stop event bubbling up and doing other stuff (like pinch zoom or scroll)
+}
+// Function. Mouse position relative to top left
+function getMousePos(e) {
+if (!e)
+var e = event;
+if (e.offsetX) {
+mouseX = e.offsetX;
+mouseY = e.offsetY;
+console.log("offsetX: " + mouseX)
+console.log("offsetY: " + mouseY)
+}
+else if (e.layerX) {
+console.log("layerX: " + mouseX)
+console.log("layerY: " + mouseY)
+mouseX = e.layerX;
+mouseY = e.layerY;
+}
+}
+//Function. Adds mouse coords to array of coords
+function recordClockCoords(coords) {
+p8.append(coords);
+}
+//Function. Draws circle on canvas
+function drawCircle(domElement){
+$(domElement).attr("width", 300)
+$(domElement).attr("height",300)
+ctx = domElement.getContext("2d");
+ctx.clearRect(0, 0, domElement.width, domElement.height);
+ctx.strokeStyle = "black";
+ctx.arc(domElement.width / 2, domElement.height / 2, 145 , 0, Math.PI * 2);
+ctx.stroke();
+if (ctx) {
+domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
+domElement.addEventListener('mousemove', sketchpad_mouseMove, false);
+window.addEventListener('mouseup', sketchpad_mouseUp, true);
+}
+}
+//Function. Draws box on canvas
+function drawBoxes(domElement){
+console.log("drawBoxes")
+$(domElement).attr("width", 650)
+$(domElement).attr("height", 210)
+ctx=domElement.getContext("2d");
+ctx.clearRect(0, 0, domElement.width, domElement.height);
+//Draws the square
+ctx.strokeRect(1,1,200,200);
+var d = 500;
+//Draws the rectangle
+ctx.strokeRect(1+d,1,100,200);
+var tX = 350;
+ctx.beginPath();
+ctx.moveTo(tX,1);
+//Draws the triangle
+ctx.lineTo(tX+100,200);
+ctx.lineTo(tX-100,200);
+ctx.lineTo(tX,1);
+ctx.stroke();
+if (ctx) {
+domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
+domElement.addEventListener('mousemove', sketchpad_mouseMove, false);
+window.addEventListener('mouseup', sketchpad_mouseUp, true);
+}
+}
+function starttest(){
+console.log("Starttest worked")
+location.hash = "#p1";
+$(".wholepage").hide()//Hide previous page
+$("#p1").show() //Show next page
+}
+function admintest(){
+console.log("Admintest worked")
+location.hash = "#p0";
+}
+function next(){
+console.log(location.hash)
+var tonext=location.hash;
+tonext = tonext.replace(/[^0-9\.]+/g, "");
+console.log(tonext)
+one=1;
+tonext++;
+console.log("We clicked the button")
+console.log(tonext)
+location.hash="#p"+tonext
+$(".wholepage").hide()//Hide previous page
+$("#p"+tonext).show() //Show next page
+}
+if(localStorage.getItem("current_item")){
+var currentQuestion = JSON.parse(localStorage.getItem("current_item"))
+console.log("Loaded current object:", currentQuestion)
+}else{
+console.log("No current object.")
+var currentQuestion = {};
+}
+//Attaches the event handler 'touchmove' to the document.
+$(document).bind('touchmove', false);
+//Holds off function execution till DOM completely loaded.
+$(document).ready(function(){
+$("input, select").change(function(evt){
+currentQuestion[evt.target.name] = evt.target.value;
+localStorage.setItem("current_item", JSON.stringify(currentQuestion));
+console.log("saved:", currentQuestion)
+});
+//Function. Applies next button to all question class
+$(".wholepage").each(function(i,e){
+$(e).attr("id","p"+i)
+//The 'Next' button
+if (i<2) {
+var btn = $('<input type="button" class="hide" value="Next">'); //Creates
+} else if (i<6) {
+var btn = $('<input type="button" class="next" value="Submit">');
+} else{
+var btn = $('<input type="button" class="hide" value="Next">');
+} //the 'Next' button
+console.log(i) // Writes to console what page we are on DEBUG
+btn.attr("data-to",i+1) //'Next' Button associated with next page (question)
+btn.attr("data-id",i) //Let the 'Next' button know what page (question) it's currently on.
+/* Not a clue. dont think its needed
+if (i===15) {
+downloadCanvas("canvas1", "firstattempt.png")
+console.log("We tried to download")
+console.log(i)
+}
+*/
+//Binds the event handler 'click' to the event where the 'Next' button is clicked.
+btn.bind('click', function(ev){
+var toId = $(ev.target).data("to")
+$(".wholepage").hide()//Hide previous page
+$("#p"+toId).show() //Show next page
+location.hash = "#p"+toId //Moves to next page.
+});
+$(e).append(btn) //'Next' button now listens for events
+/* //The 'Previous' button DEBUG
+if (i<7) {
+var btn3 = $('<input type="button" class="hide" value="Previous">'); //Creates
+} else {
+var btn3 = $('<input type="button" class="previous" value="Back">')}; //the 'Previous' button
+btn3.attr("data-to",i-1) //'Previous' Button associated with Previous page (question).
+btn3.attr("data-id",i) //Let the 'Previous' button know what page (question) it's currently on.
+//Binds the event handler 'click' to the event where the 'Previous' button is clicked.
+btn3.bind('click', function(ev){
+var toprev = $(ev.target).data("to")
+$(".wholepage").hide()//Hide previous page
+$("#p"+toprev).show() //Show next page
+location.hash = "#p"+toprev //Moves to next page.
+});
+$(e).append(btn3) //'Previous' button now listens for events */
+/*The 'Start over' button
+if (i<7) {
+var btn2 = $('<input type="button" class="hide" value="Start Over">'); //Creates
+} else {
+var btn2 = $('<input type="button" class="over" value="over">')}; //the 'Start Over' button
+//Binds the event handler 'click' to the event where the 'Start over' button is clicked.
+btn2.bind('click', function(ev){
+//Display a pop-up box that asks user to confirm action
+if(confirm("really start over?")){
+location.hash = "#p0"; //Reset the page (question) number
+location.reload(); //Reload the page.
+}
+});
+$(e).append(btn2) //'Start over' button now listens for events (i.e. detects when it is clicked) */
+});
+//Logs the page identifier, unless empty then set to q0
+if(location.hash){
+console.log(location.hash)
+var hId = location.hash
+}else{
+var hId = "#p0"
+}
+//Display the question identifier
+$(hId).show()
+//Draws circle on 'canvas1'
+var can = document.getElementById("canvas1");
+drawCircle(can);
+//When canvas1 is touched, associate it wth currentDrawCanvas so we know it is now available to act on.
+can.ontouchstart = function(e){
+currentDrawCanvas = document.getElementById("canvas1");
+}
+can.onmousedown = function(e){
+currentDrawCanvas = document.getElementById("canvas1");
+}
+//Handle different types of input.
+can.ontouchmove = moveEventFunction; //Associates touch with moveEventFunction.
+can.onmousemove = moveEventFunction; //Associates mouse movement with moveEventFunction.
+//When canvas interaction has ended, no more cooordinates recorded.
+can.ontouchend = function(e){
+//Resets p1
+p1 = null;
+};
+can.onmouseup = function(e) {
+mouseDown = 0;
+p1 = null;
+}
+mouseDown = 0;
+//Draws boxes on 'canvas2'
+var can2 = document.getElementById("canvas2");
+drawBoxes(can2);
+//When canvas2 is touched, associate it with currentDrawCanvas so we know it is available to act on.
+can2.ontouchstart = function(e){
+currentDrawCanvas = document.getElementById("canvas2");
+}
+can2.onmousedown = function(e) {
+currentDrawCanvas = document.getElementById("canvas2");
+}
+//Handle different types of input.
+can2.ontouchmove = moveEventFunction; //Associates touch with moveEventFunction.
+can2.onmousemove = moveEventFunction; //Associates mouse movement with moveEventFunction.
+//When canvas interaction has ended, no more cooridnates recorded.
+can2.ontouchend = function(e){
+//Resets p1
+p1 = null;
+};
+can2.onmouseup = function(e) {
+mouseDown = 0;
+p1 = null;
+}
+});
+//Function. Draws on the Canvas
+var mode = "pen"
+function drawDot(ctx,x,y,size,e) {
+if(mode=="erase") {
+ctx.fillStyle = "#FFFFFF"; // Fill colour white
+}
+else {
+ctx.fillStyle = "#688Fc4";
+}
+ctx.beginPath();
+ctx.arc(x, y, size, 0, Math.PI*2, true);
+ctx.closePath();
+ctx.fill();
+}
+//Sets the function to erase
+function erase() {
+mode = "erase";
+console.log("eraser selected")
+size = 5;
+}
+//Sets the function to pen
+function pen() {
+mode = "pen";
+size = 2;
+console.log("pen selected")
+}
+// Keep track of the mouse button being pressed and draw a dot at current location
+function sketchpad_mouseDown() {
+mouseDown=1;
+drawDot(ctx,mouseX,mouseY,size, e);
+}
+// Keep track of the mouse button being released
+function sketchpad_mouseUp() {
+mouseDown=0;
+}
+// Keep track of the mouse position and draw a dot if mouse button is currently pressed
+function sketchpad_mouseMove(e) {
+// Update the mouse co-ordinates when moved
+getMousePos(e);
+// Draw a dot if the mouse button is currently being pressed
+if (mouseDown==1) {
+drawDot(ctx,mouseX,mouseY,size,e);
+}
 }
 </script>
+<!-- Start the CSS language -->
+<style>
+*{
+font-family:"Times New Roman";
+}
+/*div {
+background-color: #A0B8C8;
+} */
+input,select {
+font-family: Helvetica ;
+font-weight: bold ;
+padding: 15px;
+-webkit-appearance: none;
+background-color: #8A929D;
+}
+.guest {
+margin:auto;
+width:50%;
+}
+.admin{
+font-family: Helvetica ;
+font-weight: bold ;
+padding: 15px;
+width:50%;
+}
+.wholepage {
+position: relative;
+min-height: 100%;
+min-width: 100%;
+}
+#canvas1div{
+position:absolute;
+width:350px;
+top:350px;
+height:350px;
+left:674px;
+}
 
+.drawheader{
+position:absolute;
+height:250px;
+width:100%;
+right:0; left:0;
+margin:auto;
+}
+
+#canvas1 {
+position:absolute;
+margin:auto;
+width:100%;
+right:0; left:0;
+}
+#canvas2 {
+position:absolute;
+margin:auto;
+right:0; left:0;
+}
+#canvas2div{
+position:absolute;
+width:100%;
+margin:auto;
+right:0; left:0;
+}
+.shapepage{
+position:absolute;
+height:100%;
+width:100%;
+text-align: center;
+margin: auto;
+right: 0; left:0;
+}
+#largestshape {
+position:absolute;
+bottom:20%;
+width:50%;
+margin:auto;
+left:0; right:0;
+}
+.buttontable {
+position:absolute;
+bottom:10px;
+width: 50%;
+margin:auto;
+left:0; right:0;
+}
+.button {
+font-family: Helvetica ;
+font-weight: bold ;
+padding: 15px;
+width:90%;
+}
+.infopage{
+position:absolute;
+top:30%;
+width:80%;
+text-align: center;
+margin:auto;
+right:0; left:0;
+}
+.clockpage{
+position:absolute;
+height:100%;
+width:100%;
+text-align: center;
+margin: auto;
+right: 0; left:0;
+}
+.wrapper{
+position: absolute;
+top: 20%;
+width: 50%;
+text-align: center;
+right: 0; left: 0;
+margin:auto;
+}
+.hide {
+display:none;
+}
+.infosubmit,.next{
+position:absolute;
+bottom:10px;
+right:5px;
+}
+.question{
+position: absolute;
+top:30%;
+width:100%;
+text-align: center;
+right:0; left:0;
+margin:auto;
+}
+.titlepage{
+margin:auto;
+}
+html,body {
+background-color: #A0B8C8;
+height:100%;
+width:100%;
+}
+table{
+text-align: center;
+}
+</style>
+</head>
+<!-- Back to HTML Language -->
+<body ontouchmove="BlockMove(event);">
+<div class="wholepage">
+<div class="wrapper">
+<div class="titlepage">
+<h1> Cambridge University Paper to Digital Equivalence Testing </h1>
+</div>
+<input type="submit" class="guest" onclick="starttest();" value="Guest User">
+<div><br></div>
+<input type="submit" class="admin" onclick="admintest();" value="Admin">
+</div>
+</div>
+<div class="wholepage">
+<div class="infopage">
+This is an initial application designed to investigate whether mobile devices are suitable to adminster apps which affect mental health. This is NOT a screening test for dementia. We are not qualified to diagnose dementia, nor are we trying to. We are using the St Loius University Mental Status Exams (SLUMS) as an example of such a test. If you wish to participate in the study, please press continue.
+</div>
+<input type="submit" class="infosubmit" onclick="next();" value="Continue">
+</div>
+<div class="wholepage">
+<div class="question" title="details">
+<table align="center">
+<tr><td><h2>First name</h2></td><td><td style="padding-right: 70px"></td></td><td><input id="first_name" name="first_name" type="text" value=""/></tr>
+<tr><td><h2>Surname</h2></td><td style="padding-right: 70px"><td></td><td><input id="surname" name="surname" type="text" value=""/></tr>
+</table>
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<table align="center">
+<tr><td style="padding-right: 100px"><h2>Age</h2></td><td><input id = "age" name="age" type="number" value=""/></td></tr>
+<tr><td style="padding-right: 100px"><h2>Date of birth</h2></td><td><input id="dob" name="dob" type="date" value=""></td></tr>
+</table>
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2>Highest level of Education</h2>
+<select id="educationlevels">
+<option value="">- Select a level of education-</option>
+<option label="Primary" value="">Primary</option>
+<option label="Secondary" value="">Secondary</option>
+<option label="University" value="">University</option>
+<option label="Masters" value="">Masters</option>
+<option label="PhD" value="">PhD</option>
+<option label="Other" value="">Other</option>
+</select>
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2>Level of Alertness</h2>
+<select id="alertnesslevels">
+<option value="">-Select the closest level of Alertness-</option>
+<option label="Alert" value="Awake and able to focus"></option>
+<option label="Drowsy" value="Drowsy"></option>
+<option label="Confused" value="Confused"></option>
+<option label="Distractable" value="Distractable"></option>
+<option label="Inattentive" value="Inattentive"></option>
+<option label="Preoccupied" value="Preoccupied"></option>
+<option label="Unsure" value ="Unsure"></option>
+</select>
+</div>
+</div>
+<div class="wholepage">
+<div class="infopage">
+The following pages will ask you questions about your memory. It is not a test that you can fail, but is merely a tool to check the amount of memory you have, such as a thermometer measures your temperature.
+</div>
+<input type="submit" class="infosubmit" onclick="next();" value="Continue">
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee"> What day of the week is it? </h2>
+<div><br></div>
+<input id="q1" name="q1" type="text" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">What is the year?</h2>
+<div><br></div>
+<input id="q2" name="q2" type="number" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">What county are we in?</h2>
+<div><br></div>
+<input id="q3" name="q3" type="text" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="infopage">
+<h2 id="testee">Please remember these five objects. I will ask you what they are later.</h2></p>
+<ul id="testee">
+<li>Apple</li>
+<li>Pen</li>
+<li>Tie</li>
+<li>House</li>
+<li>Car</li>
+</ul>
+</div>
+<input type="submit" class="infosubmit" onclick="next();" value="Continue">
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">You have $100 and you go to the store and buy a dozen apples for $3 and a tricyle for $20.</h2>
+<h2 id="testee">How much did you spend?</h2>
+<div><br></div>
+<input id="q5a" name="q5a" type="text" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">How much do you have left?</h2>
+<div><br></div>
+<input id="q5b" name="q5b" type="text" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">Please name as many animals as you can in one minute.</h2>
+<h2 id="tester"> Please record the number of correct animals, Not Species, that they manage to recite</h2>
+<input id="q6" name="q6" type="text" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">What were the five objects I asked you to remember?</h2></p>
+<div><br></div>
+<input id="q7" name="q7" type="text" value="" />
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="infopage">
+<h2 id="testee">I'm going to give you a series of numbers and I would like you to give them to me backwards. For Example, if I say 42, you would say 24.</h2>
+</div>
+<input type="submit" class="infosubmit" onclick="next();" value="Continue">
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee"> If I say 87, you would say</h2>
+<input id="q8a" name="q8a" type="text" value-""/>
+<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee"> If I say 659, you would say</h2>
+<input id="q8b" name="q8b" type="text" value-""/>
+<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee"> If I say 8537, you would say</h2>
+<input id="q8c" name="q8c" type="text" value-""/>
+<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="clockpage">
+<div class="drawheader">
+<h2 id="testee"> This is a clock face <br>
+Please Draw the hour markers <br>
+Please draw what the clock would look like at ten minutes to 11 o'clock </h2>
+</div>
+<div id="canvas1div"><canvas id="canvas1"></canvas></div>
+</div>
+<table class="buttontable" align="center">
+<tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
+<td><input class="button" type="button" onclick="erase();" value="Eraser"> </td>
+<td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
+</table>
+<input type="submit" class="infosubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="shapepage">
+<h2 id="testee">Please place an X in the triangle</h2>
+<h2 id="testee">Which of the above figures is largest?</h2>
+<div id="canvas2div"><canvas id="canvas2"></canvas></div>
+<div id="largestshape">
+<select id="largestshape">
+<option value="">- Select a shape-</option>
+<option label="Square" value="">Square</option>
+<option label="Triangle" value="">Triangle</option>
+<option label="Circle" value="">Circle</option>
+</select>
+</div>
+<table class="buttontable" align="center">
+<tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
+<td><input class="button" type="button" onclick="erase();" value="Eraser"> </td>
+<td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
+</table>
+<input type="submit" class="infosubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="infopage">
+<h2 id="testee">I am going to tell you a story. Please listen carefully because afterwards, I'm going to ask you some questions about it.</h2></div>
+<input type="submit" class="infosubmit" onclick="next();" value="Continue">
+</div>
+<div class="wholepage">
+<div class="infopage">
+<h2 id="testee"> Please listen to the story </h2>
+</div>
+<input type="submit" class="infosubmit" onclick="next();" value="Continue">
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">What was the female's name?</h2>
+<input id="q11a" name="q11a" type="number" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">When did she go back to work?</h2>
+<input id="q11b" name="q11b" type="number" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">What work did she do?</h2>
+<input id="q11c" name="q11c" type="number" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="question">
+<h2 id="testee">What state did she live in?</h2>
+<input id="q11d" name="q11d" type="number" value=""/>
+<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+</div>
+</div>
+<div class="wholepage">
+<div class="infopage">
+Thank you for completing the test. The supervisor will now talk to you about the test you have done.
+</div>
+</div>
 </body>
-</html> 
-
+</head>
+</html>
+<!-- Things that have come accross which may be useful
+You'll also want to disable the body and document from scrolling horizontally:
+body, html
+{
+overflow-x: hidden;
+}
+<!-- <!DOCTYPE html> INNER HTML
+<html>
+<body>
+<p id="myP">I am a paragraph.</p>
+<p>Click the button get the HTML content of the p element.</p>
+<button onclick="myFunction()">Try it</button>
+<p id="demo"></p>
+<script>
+function myFunction() {
+var x = document.getElementById("myP").innerHTML;
+document.getElementById("demo").innerHTML = x;
+}
+</script>
+</body>
+</html>
 http://www.w3schools.com/tags/tryit.asp?filename=tryhtml_form_submit - Useful on input boxes
 -->
