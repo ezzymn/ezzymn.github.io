@@ -195,14 +195,14 @@
 
      //Function. Draws circle on canvas
      function drawCircle(domElement){
-      $(domElement).attr("width", 350)
-      $(domElement).attr("height",350)
+      $(domElement).attr("width", 300)
+      $(domElement).attr("height",300)
 
       ctx = domElement.getContext("2d");
       
       ctx.clearRect(0, 0, domElement.width, domElement.height);
       ctx.strokeStyle = "black";
-      ctx.arc(domElement.width / 2, domElement.height / 2, 170 , 0, Math.PI * 2);
+      ctx.arc(512, 567, 145 , 0, Math.PI * 2);
       ctx.stroke();
       if (ctx) {
         domElement.addEventListener('mousedown', sketchpad_mouseDown, false);
