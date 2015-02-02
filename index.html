@@ -155,7 +155,7 @@
               p1 = p
             }else{
               ctx.beginPath();
-              ctx.strokeStyle = "#F6c7785"; // Line drawing colour
+              ctx.strokeStyle = "#FFFFFF"; // Line drawing colour
               ctx.moveTo(p1.x,p1.y);
               ctx.lineTo(p.x,p.y);
               ctx.stroke();
@@ -322,38 +322,6 @@
           location.hash = "#p"+toId //Moves to next page.
         });
         $(e).append(btn) //'Next' button now listens for events
-
-       /* //The 'Previous' button DEBUG
-
-        if (i<7) {
-        var btn3 = $('<input type="button" class="hide" value="Previous">'); //Creates 
-        } else {
-        var btn3 = $('<input type="button" class="previous" value="Back">')}; //the 'Previous' button 
-        btn3.attr("data-to",i-1) //'Previous' Button associated with Previous page (question).          
-        btn3.attr("data-id",i) //Let the 'Previous' button know what page (question) it's currently on.
-        //Binds the event handler 'click' to the event where the 'Previous' button is clicked.
-        btn3.bind('click', function(ev){
-          var toprev = $(ev.target).data("to")         
-          $(".wholepage").hide()//Hide previous page
-          $("#p"+toprev).show()  //Show next page
-          location.hash = "#p"+toprev //Moves to next page.
-        });
-        $(e).append(btn3) //'Previous' button now listens for events */
-
-        /*The 'Start over' button
-        if (i<7) {
-        var btn2 = $('<input type="button" class="hide" value="Start Over">'); //Creates 
-        } else {
-        var btn2 = $('<input type="button" class="over" value="over">')}; //the 'Start Over' button 
-        //Binds the event handler 'click' to the event where the 'Start over' button is clicked.
-        btn2.bind('click', function(ev){
-          //Display a pop-up box that asks user to confirm action
-          if(confirm("really start over?")){            
-            location.hash = "#p0"; //Reset the page (question) number
-            location.reload();  //Reload the page.
-          }
-        });
-        $(e).append(btn2) //'Start over' button now listens for events (i.e. detects when it is clicked) */
     });
 
 
@@ -861,11 +829,11 @@
         <div class="shapepage">
           <div class="drawheader">
         <h2 id="testee">Please place an X in the triangle</h2>
-        <h2 id="testee">Which of the above figures is largest?</h2></div>
+        <h2 id="testee">Which of the shapes below is the largest?</h2></div>
         <div id="canvas2div"><canvas id="canvas2"></canvas></div>
         <div id="largestshape">
         <select id="largestshape">
-                    <option value="">- Select a shape-</option>
+                    <option value="">- Select the largest shape-</option>
                     <option label="Square" value="">Square</option>
                     <option label="Triangle" value="">Triangle</option>
                     <option label="Circle" value="">Circle</option>
