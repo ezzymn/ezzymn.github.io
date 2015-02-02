@@ -155,7 +155,13 @@
               p1 = p
             }else{
               ctx.beginPath();
-              ctx.strokeStyle = "#FFFFFF"; // Line drawing colour
+            if(mode=="erase") {
+            ctx.fillStyle = "#FFFFFF"; // Fill colour white
+             }   else { 
+             ctx.fillStyle = "#688Fc4";       
+             }
+              ctx.beginPa
+            /*  ctx.strokeStyle = "#FFFFFF"; // Line drawing colour */
               ctx.moveTo(p1.x,p1.y);
               ctx.lineTo(p.x,p.y);
               ctx.stroke();
@@ -393,8 +399,7 @@
     function drawDot(ctx,x,y,size,e) {     
       if(mode=="erase") {
       ctx.fillStyle = "#FFFFFF"; // Fill colour white
-    }
-    else { 
+    }   else { 
       ctx.fillStyle = "#688Fc4";       
     }
     ctx.beginPath();
