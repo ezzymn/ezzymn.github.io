@@ -43,9 +43,9 @@
     }
 
      // Function. Prevents scrolling past screen 
-    function BlockMove(event) {
+     function BlockMove(event) {
       event.preventDefault() ;
-       }
+    }
 
     // Function. Clears all local data stored after confirm
     function clearLocalData(){
@@ -87,7 +87,56 @@
       window.location.href = "mailto:"+mail+"?subject="+subject+"&body="+body
     }
 
+    //Function that create a 60 second countdown timer
+    var timeInSecs;
+    var ticker;
 
+    function startTimer(secs){
+    timeInSecs = parseInt(secs)-1;
+    ticker = setInterval("tick()",1000);   // every second
+    }
+
+    // Stops the current audio track 
+    function stopaudio() {
+    var audioPlayer = document.getElementsByTagName('audio')[0];
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+}
+
+  function playaudio() {
+    var audiosection =document.getElementsByTagName('audio')[0];
+    audiosection.play();
+  }
+
+
+    function tick() {
+    var secs = timeInSecs;
+    if (secs>0) {
+    timeInSecs--;
+    }
+    else {
+    clearInterval(ticker); // stop counting at zero
+    }
+
+    document.getElementById("countdown").innerHTML = secs;
+    }
+
+    function starttimer() {
+      console.log("We pressed the button")
+    startTimer(60);  
+    }// 60 seconds 
+
+
+    //Function. Needs user code to navigate to database
+    function admincheck() {
+    var code = prompt("Please enter the password", "");
+    
+    if (code === "5219") {
+        seeDatabase();
+    } else {
+      alert("Sorry that is not the password");
+    }
+}
     //Function. Displays the database 
     function seeDatabase(){
       $(".wholepage").hide()
@@ -155,24 +204,24 @@
               p1 = p
             }else{
               ctx.beginPath();
-            if(mode=="erase") {
+              if(mode=="erase") {
             ctx.fillStyle = "#FFFFFF"; // Fill colour white
-             }   else { 
-             ctx.fillStyle = "#688Fc4";       
-             }
-              ctx.beginPa
-            /*  ctx.strokeStyle = "#FFFFFF"; // Line drawing colour */
-              ctx.moveTo(p1.x,p1.y);
-              ctx.lineTo(p.x,p.y);
-              ctx.stroke();
-              p1 = p;              
-            }
-          }
-        }
-      }
-      else {
-        sketchpad_mouseMove(e);
-      }            
+          }   else { 
+           ctx.fillStyle = "#688Fc4";       
+         }
+         ctx.beginPa
+         /*  ctx.strokeStyle = "#FFFFFF"; // Line drawing colour */
+         ctx.moveTo(p1.x,p1.y);
+         ctx.lineTo(p.x,p.y);
+         ctx.stroke();
+         p1 = p;              
+       }
+     }
+   }
+ }
+ else {
+  sketchpad_mouseMove(e);
+}            
       return false; // Stop event bubbling up and doing other stuff (like pinch zoom or scroll)
     }
 
@@ -197,7 +246,7 @@
     //Function. Adds mouse coords to array of coords
     function recordClockCoords(coords) {
       p8.append(coords);
-      }
+    }
 
      //Function. Draws circle on canvas
      function drawCircle(domElement){
@@ -254,17 +303,64 @@
       $("#p1").show()  //Show next page
     }
 
+    function backtostart(){
+      console.log("Went Back to start")
+      location.hash = "#p0";
+      $(".wholepage").hide();
+      $("#p0").show()
+      counter=0;
+    }
+
     function admintest(){
       console.log("Admintest worked")
       location.hash = "#p0";
+    }
+
+    function nextaudiostart(){
+      console.log(location.hash)
+      var tonext=location.hash;
+      tonext = tonext.replace(/[^0-9\.]+/g, "");
+      tonext++;
+      console.log("We clicked the button")
+      console.log(tonext)
+      location.hash="#p"+tonext
+      $(".wholepage").hide()//Hide previous page
+      $("#p"+tonext).show()  //Show next page
+      playaudio()
+    }    
+
+        function nextaudiostop(){
+      console.log(location.hash)
+      var tonext=location.hash;
+      tonext = tonext.replace(/[^0-9\.]+/g, "");
+      tonext++;
+      console.log("We clicked the button")
+      console.log(tonext)
+      location.hash="#p"+tonext
+      $(".wholepage").hide()//Hide previous page
+      $("#p"+tonext).show()  //Show next page
+      stopaudio()
+    }    
+
+    function gotostory(){
+      console.log("We went to the story")
+      stopaudio()
+      location.hash="#p29"
+      $(".wholepage").hide()
+      $("#p29").show()
+    }
+
+    function backtoquestion(){
+      console.log("We tried to go back")
+      location.hash="#p23"
+      $(".wholepage").hide()
+      $("#p23").show()
     }
 
     function next(){
       console.log(location.hash)
       var tonext=location.hash;
       tonext = tonext.replace(/[^0-9\.]+/g, "");
-      console.log(tonext)
-      one=1;
       tonext++;
       console.log("We clicked the button")
       console.log(tonext)
@@ -295,17 +391,16 @@
         console.log("saved:", currentQuestion)
       });
 
-
     //Function. Applies next button to all question class
     $(".wholepage").each(function(i,e){
-        $(e).attr("id","p"+i)
+      $(e).attr("id","p"+i)
 
         //The 'Next' button
-       if (i<2) {
+        if (i<2) {
         var btn = $('<input type="button" class="hide" value="Next">'); //Creates 
-        } else if (i<6) {
+      } else if (i<6) {
         var btn = $('<input type="button" class="next" value="Submit">');
-        } else{
+      } else{
         var btn = $('<input type="button" class="hide" value="Next">'); 
         } //the 'Next' button 
         console.log(i) // Writes to console what page we are on DEBUG
@@ -328,16 +423,16 @@
           location.hash = "#p"+toId //Moves to next page.
         });
         $(e).append(btn) //'Next' button now listens for events
-    });
+      });
 
 
     //Logs the page identifier, unless empty then set to q0
     if(location.hash){
       console.log(location.hash)
       var hId = location.hash
-      }else{
+    }else{
      var hId = "#p0"
-     }
+   }
     //Display the question identifier
     $(hId).show()
 
@@ -408,18 +503,19 @@
     ctx.fill();
   } 
 
-    //Sets the function to erase
-    function erase() {
-      mode = "erase";
-      console.log("eraser selected")
-      size = 5;
-    }
-    //Sets the function to pen
-    function pen() {
-      mode = "pen";
-      size = 2;
-      console.log("pen selected")
-    }
+  var counter1 = 0;
+  var counter2 = 0;
+
+  function clearcanvas1(){
+    counter1++
+    console.log(counter1)
+    drawCircle($('#canvas1')[0])
+  }
+    function clearcanvas2(){
+    counter2++
+    console.log(counter2)
+    drawBoxes($('#canvas2')[0])
+  }
    // Keep track of the mouse button being pressed and draw a dot at current location
    function sketchpad_mouseDown() {
     mouseDown=1;
@@ -451,30 +547,30 @@
 
       /*div {
         background-color: #A0B8C8;
-      } */
+        } */
 
-      input,select {
-       font-family: Helvetica ;
-       font-weight: bold ;
-       padding: 15px; 
-       -webkit-appearance: none;
-       background-color: #8A929D;
+        input,select {
+         font-family: Helvetica ;
+         font-weight: bold ;
+         padding: 15px; 
+         -webkit-appearance: none;
+         background-color: #8A929D;
        }
 
        .guest {
-       margin:auto;
-       width:50%;
+         margin:auto;
+         width:50%;
        }
 
-      .admin{
-      font-family: Helvetica ;
-      font-weight: bold ; 
-      padding: 15px; 
-      width:50%;
+       .admin{
+        font-family: Helvetica ;
+        font-weight: bold ; 
+        padding: 15px; 
+        width:50%;
 
       }
 
-       .wholepage {
+      .wholepage {
         position: relative;
         min-height: 100%;
         min-width: 100%;
@@ -541,6 +637,10 @@
         left:0; right:0;
       }
 
+      .dateinput{
+        width:75px;
+      }
+
       .buttontable {
         position:absolute;
         bottom:10px;
@@ -550,10 +650,10 @@
       }
 
       .button {
-      font-family: Helvetica ;
-      font-weight: bold ; 
-      padding: 15px; 
-      width:90%;
+        font-family: Helvetica ;
+        font-weight: bold ; 
+        padding: 15px; 
+        width:90%;
       }
 
       .infopage{
@@ -583,11 +683,33 @@
         margin:auto;
       }
 
+      .wrapper2{
+        position: absolute;
+        top:50;
+        width: 100%;
+        text-align: center;
+        right: 0; left: 0;
+        margin:auto;
+      }
+
       .hide {
         display:none;
       }
 
-      .infosubmit,.next{
+      .gotostory, .backtoquestion{
+        position:absolute;
+        bottom:10px;
+        margin:auto;
+        left:0; right:0;
+      }
+
+      .infosubmit,.next, .backtostart{
+        position:absolute;
+        bottom:10px;
+        right:5px;
+      }
+
+      #q7next {
         position:absolute;
         bottom:10px;
         right:5px;
@@ -623,17 +745,16 @@
 
     <!-- Back to HTML Language -->
     <body ontouchmove="BlockMove(event);">
-      <div class="wholepage">
+      <div class="wholepage" id="maintitle">
         <div class="wrapper">
-        <div class="titlepage">
-          <h1> Cambridge University Paper to Digital Equivalence Testing </h1>
+          <div class="titlepage">
+            <h1> Cambridge University Paper to Digital Equivalence Testing </h1>
+          </div>
+          <input type="submit" class="guest" onclick="starttest();" value="Guest User">
+          <div><br></div>
+          <input type="submit" class="admin" onclick="admincheck();" value="Admin">
         </div>
-        <input type="submit" class="guest" onclick="starttest();" value="Guest User">
-        <div><br></div>
-        <input type="submit" class="admin" onclick="admintest();" value="Admin">
       </div>
-      </div>
-    
 
       <div class="wholepage">
         <div class="infopage">
@@ -653,49 +774,49 @@
 
       <div class="wholepage">
         <div class="question">
-        <table align="center">
-        <tr><td style="padding-right: 100px"><h2>Age</h2></td><td><input id = "age" name="age" type="number" value=""/></td></tr>
-        <tr><td style="padding-right: 100px"><h2>Date of birth</h2></td><td><input id="dob" name="dob" type="date" value=""></td></tr>
-        </table>
+          <table align="center">
+            <tr><td style="padding-right: 100px"><h2>Age</h2></td><td><input id = "age" name="age" type="number" value=""/></td></tr>
+            <tr><td style="padding-right: 100px"><h2>Date of birth</h2></td><td><input id="dob" name="dob" type="date" value="" class="dateinput"></td></tr>
+          </table>
         </div>
       </div>
 
       <div class="wholepage">
         <div class="question">
-        <h2>Highest level of Education</h2>
-        <select id="educationlevels">
-                    <option value="">- Select a level of education-</option>
-                    <option label="Primary" value="">Primary</option>
-                    <option label="Secondary" value="">Secondary</option>
-                    <option label="University" value="">University</option>
-                    <option label="Masters" value="">Masters</option>
-                    <option label="PhD" value="">PhD</option>
-                    <option label="Other" value="">Other</option>
-        </select>
+          <h2>Highest level of Education</h2>
+          <select id="educationlevels">
+            <option value="">- Select a level of education-</option>
+            <option label="Primary" value="">Primary</option>
+            <option label="Secondary" value="">Secondary</option>
+            <option label="University" value="">University</option>
+            <option label="Masters" value="">Masters</option>
+            <option label="PhD" value="">PhD</option>
+            <option label="Other" value="">Other</option>
+          </select>
         </div>
       </div>
 
       <div class="wholepage">
-      <div class="question">
-      <h2>Level of Alertness</h2>
-      <select id="alertnesslevels">
-                    <option value="">-Select the closest level of Alertness-</option>
-                    <option label="Alert" value="Awake and able to focus"></option>
-                    <option label="Drowsy" value="Drowsy"></option>
-                    <option label="Confused" value="Confused"></option>
-                    <option label="Distractable" value="Distractable"></option>
-                    <option label="Inattentive" value="Inattentive"></option>
-                    <option label="Preoccupied" value="Preoccupied"></option>
-                    <option label="Unsure" value ="Unsure"></option> 
-      </select>
-      </div>
+        <div class="question">
+          <h2>Level of Alertness</h2>
+          <select id="alertnesslevels">
+            <option value="">-Select the closest level of Alertness-</option>
+            <option label="Alert" value="Awake and able to focus"></option>
+            <option label="Drowsy" value="Drowsy"></option>
+            <option label="Confused" value="Confused"></option>
+            <option label="Distractable" value="Distractable"></option>
+            <option label="Inattentive" value="Inattentive"></option>
+            <option label="Preoccupied" value="Preoccupied"></option>
+            <option label="Unsure" value ="Unsure"></option> 
+          </select>
+        </div>
       </div>
 
       <div class="wholepage">
-        <div class="infopage">
-         The following pages will ask you questions about your memory. It is not a test that you can fail, but is merely a tool to check the amount of memory you have, such as a thermometer measures your temperature. 
-       </div>
-       <input type="submit" class="infosubmit" onclick="next();" value="Continue">
+          <div class="infopage">
+          <h2 id="tester"> The following pages will ask you questions about your memory. It is not a test that you can fail, but is merely a tool to check the amount of memory you have, such as a thermometer measures your temperature. </h2>
+         </div>
+         <input type="submit" class="infosubmit" onclick="next();" value="Continue">
       </div>
 
       <div class="wholepage">
@@ -708,207 +829,235 @@
       </div>
 
       <div class="wholepage">
-      <div class="question">     
-      <h2 id="testee">What is the year?</h2> 
-      <div><br></div>
-      <input id="q2" name="q2" type="number" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+       <div class="question">     
+         <h2 id="testee">What is the year?</h2> 
+           <div><br></div>
+             <input id="q2" name="q2" type="number" value=""/>
+             <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+       </div>
       </div>
-      </div>
-      
-      <div class="wholepage">     
-         <div class="question">
-         <h2 id="testee">What county are we in?</h2>
-         <div><br></div>
-      <input id="q3" name="q3" type="text" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
 
+      <div class="wholepage">
+        <div class="question">
+          <h2 id="testee">What county are we in?</h2>
+           <div><br></div>
+          <input id="q3" name="q3" type="text" value=""/>
+          <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
         </div>
       </div>
 
       <div class="wholepage">
         <div class="infopage">
-        <h2 id="testee">Please remember these five objects. I will ask you what they are later.</h2></p>
-        <ul id="testee">
-        <li>Apple</li>
-        <li>Pen</li>
-        <li>Tie</li>
-        <li>House</li>
-        <li>Car</li>
-      </ul>
-      </div>
-      <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-
-      <div class="wholepage">
-        <div class="question">
-          <h2 id="testee">You have $100 and you go to the store and buy a dozen apples for $3 and a tricyle for $20.</h2>
-      <h2 id="testee">How much did you spend?</h2>
-      <div><br></div>
-      <input id="q5a" name="q5a" type="text" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-      </div>
-      </div>
-
-      <div class="wholepage">
-      <div class="question">
-      <h2 id="testee">How much do you have left?</h2>
-       <div><br></div>
-      <input id="q5b" name="q5b" type="text" value=""/>
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-      </div>
-      </div>
-      
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">Please name as many animals as you can in one minute.</h2>
-        <h2 id="tester"> Please record the number of correct animals, Not Species, that they manage to recite</h2>       
-        <input id="q6" name="q6" type="text" value=""/>     
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+         <h2 id="testee">Please remember these five objects. I will ask you what they are later. <br>
+           <div id="testee">
+             Apple <br>
+             Pen <br>
+             Tie <br>
+             House <br>
+             Car <br>
+           </h2></div>
+          <input type="submit" class="infosubmit" onclick="next();" value="Continue">
         </div>
       </div>
 
-      
       <div class="wholepage">
-      <div class="question">
-      <h2 id="testee">What were the five objects I asked you to remember?</h2></p>
-      <div><br></div>
-      <input id="q7" name="q7" type="text" value="" />  
-      <input type="submit" class="questionsubmit" onclick="next();" value="Submit">  
-      </div>
+            <div class="question">
+              <h2 id="testee">You have $100 and you go to the store and buy a dozen apples for $3 and a tricyle for $20.</h2>
+              <h2 id="testee">How much did you spend?</h2>
+              <div><br></div>
+              <input id="q5a" name="q5a" type="text" value=""/>
+              <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+            </div>
       </div>
 
+      <div class="wholepage">
+        <div class="question">
+          <h2 id="testee">How much do you have left?</h2>
+          <div><br></div>
+          <input id="q5b" name="q5b" type="text" value=""/>
+          <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+         </div>
+      </div>
 
       <div class="wholepage">
         <div class="infopage">
-        <h2 id="testee">I'm going to give you a series of numbers and I would like you to give them to me backwards. For Example, if I say 42, you would say 24.</h2>
-        </div>
+          <h2 id="tester"> On the next page, please count the number of animals, not species, that they manage to recite. There will be a clock that starts automatically</h2>
+          </div>
         <input type="submit" class="infosubmit" onclick="next();" value="Continue">
       </div>
 
 
       <div class="wholepage">
+          <div class="question">
+            <h2 id="testee">Please name as many animals as you can in one minute.</h2>     
+            <input id="q6" name="q6" type="text" value=""/>     
+            
+            <input type="submit" class="questionsubmit" onclick="next();" value="Submit"><br>
+            <input type="submit" class="timerstart" onclick="starttimer();" value="Start"> <br>
+            <span id="countdown" style="font-weight: bold;">60</span>
+          </div>
+      </div>
+
+
+      <div class="wholepage">
+        <div class="wrapper2">
+         <div class="question">          
+           <h2 id="testee">What were the five objects I asked you to remember?</h2></p>
+           <div><br></div>
+           <input id="q7a" name="q7a" type="text" value="">  <br><br>
+           <input id="q7b" name="q7b" type="text" value="">  <br><br>
+           <input id="q7c" name="q7c" type="text" value="">  <input type="submit" id="q7next" class="questionsubmit" onclick="next();" value="Submit"><br><br>
+           <input id="q7d" name="q7d" type="text" value="">  <br><br>
+           <input id="q7e" name="q7e" type="text" value="">  <br><br>
+         </div>             
+         </div>
+      </div>
+
+      <div class="wholepage">
+        <div class="infopage">
+          <h2 id="testee">I'm going to give you a series of numbers and I would like you to give them to me backwards. For Example, if I say 42, you would say 24.</h2>
+        </div>
+        <input type="submit" class="infosubmit" onclick="next();" value="Continue">
+      </div>
+
+      <div class="wholepage">
         <div class="question">
-        <h2 id="testee"> If I say 87, you would say</h2>
-        <input id="q8a" name="q8a" type="text" value-""/>
-        <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+          <h2 id="testee"> If I say 87, you would say</h2>
+          <input id="q8a" name="q8a" type="number" value-""/>
+          <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
         </div>
       </div>
 
       <div class="wholepage">
         <div class="question">
-        <h2 id="testee"> If I say 659, you would say</h2>
-        <input id="q8b" name="q8b" type="text" value-""/>
-        <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+          <h2 id="testee"> If I say 659, you would say</h2>
+          <input id="q8b" name="q8b" type="number" value-""/>
+          <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
         </div>
       </div>
 
       <div class="wholepage">
         <div class="question">
-        <h2 id="testee"> If I say 8537, you would say</h2>
-        <input id="q8c" name="q8c" type="text" value-""/>
-        <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+          <h2 id="testee"> If I say 8537, you would say</h2>
+          <input id="q8c" name="q8c" type="number" value-""/>
+          <input type="submit" class="questionsubmit" onclick="next()" value="Submit">
         </div>
       </div>
 
-
-
       <div class="wholepage">
-        <div class="clockpage">
-          <div class="drawheader">
-          <h2 id="testee"> This is a clock face <br>
+         <div class="clockpage">
+           <div class="drawheader">
+            <h2 id="testee"> This is a clock face <br>
             Please Draw the hour markers <br>
-            Please draw what the clock would look like at ten minutes to 11 o'clock   </h2></div>
-
-        <div id="canvas1div"><canvas id="canvas1"></canvas></div>        
-        <table class="buttontable" align="center">
-        <tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
-        <td><input class="button" type="button" onclick="erase();" value="Eraser">   </td>
-        <td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
-        </table> 
-        <input type="submit" class="infosubmit" onclick="next();" value="Submit"> 
-      </div> 
+            Please draw what the clock would look like at ten minutes to 11 o'clock   </h2>
+           </div>
+             <div id="canvas1div"><canvas id="canvas1"></canvas></div>        
+         <table class="buttontable" align="center">
+         <tr><td><input class="button" type="button" onclick="clearcanvas1();" value="Clear"></td>
+         </tr>
+         </table> 
+         <input type="submit" class="infosubmit" onclick="next();" value="Submit"> 
+        </div> 
       </div>
-      
+
       <div class="wholepage">
         <div class="shapepage">
           <div class="drawheader">
-          <h2 id="testee">Which of the shapes below is the largest?</h2>
-          <select id="largestshape">
-                    <option value="">- Select the largest shape-</option>
-                    <option label="Square" value="">Square</option>
-                    <option label="Triangle" value="">Triangle</option>
-                    <option label="Circle" value="">Circle</option>
-          </select>
+            <h2 id="testee">Which of the shapes below is the largest?</h2>
+            <select id="largestshape">
+              <option value="">- Select the largest shape-</option>
+              <option label="Square" value="">Square</option>
+              <option label="Triangle" value="">Triangle</option>
+              <option label="Circle" value="">Circle</option>
+            </select>
+          </div>
+          <div id="canvas2div"><canvas id="canvas2"></canvas></div>
+          <div id="largestshape">
+            <h2 id="testee">Please place an X in the triangle</h2>        
+          </div>
+          <table class="buttontable" align="center">
+            <tr><td><input class="button" type="button" onclick="clearcanvas2();" value="Clear"></td></tr>
+          </table> 
+          <input type="submit" class="infosubmit" onclick="next();" value="Submit">
         </div>
-        <div id="canvas2div"><canvas id="canvas2"></canvas></div>
-        <div id="largestshape">
-        <h2 id="testee">Please place an X in the triangle</h2>        
-      </div>
-        <table class="buttontable" align="center">
-        <tr><td><input class="button" type="button" onclick="drawCircle($('#canvas1')[0]);" value="Clear"></td>
-        <td><input class="button" type="button" onclick="erase();" value="Eraser">   </td>
-        <td><input class="button" type="button" onclick="pen();" value="Pen"></td></tr>
-        </table> 
-        <input type="submit" class="infosubmit" onclick="next();" value="Submit">
-        </div>
-             </div>
-
-      <div class="wholepage">
-        <div class="infopage">
-        <h2 id="testee">I am going to tell you a story. Please listen carefully because afterwards, I'm going to ask you some questions about it.</h2></div>
-        <input type="submit" class="infosubmit" onclick="next();" value="Continue">
       </div>
 
       <div class="wholepage">
         <div class="infopage">
-        <h2 id="testee"> Please listen to the story </h2>
-        </div>
-        <input type="submit" class="infosubmit" onclick="next();" value="Continue">
-      </div>
-      
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">What was the female's name?</h2> 
-        <input id="q11a" name="q11a" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
+          <h2 id="testee">I am going to tell you a story. Please listen carefully because afterwards I'm going to ask you some questions about it. Please ensure the sound is on</h2></div>
+          <input type="submit" class="infosubmit" onclick="nextaudiostart();" value="Continue">
       </div>
 
-      <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">When did she go back to work?</h2> 
-        <input id="q11b" name="q11b" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-      </div>
-
-        <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">What work did she do?</h2> 
-        <input id="q11c" name="q11c" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-        </div>
-
-        <div class="wholepage">
-        <div class="question">
-        <h2 id="testee">What state did she live in?</h2> 
-        <input id="q11d" name="q11d" type="number" value=""/>
-        <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
-        </div>
-        </div>
-      
       <div class="wholepage">
         <div class="infopage">
-        Thank you for completing the test. The supervisor will now talk to you about the test you have done.
+          <h2 id="testee"> Please listen to the story </h2>
+        </div>
+        <input type="button" class="gotostory" onclick="gotostory();" value="Press here if audio Does not Work"> <br>
+        <audio>
+        <source src="story.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+        </audio>
+        <input type="submit" class="infosubmit" onclick="nextaudiostop();" value="Continue">
+      </div>
+        
+      <div class="wholepage">
+        <div class="question">
+          <h2 id="testee">What was the female's name?</h2> 
+          <input id="q11a" name="q11a" type="text" value=""/>
+          <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
         </div>
       </div>
 
+      <div class="wholepage">
+        <div class="question">
+          <h2 id="testee">When did she go back to work?</h2> 
+          <input id="q11b" name="q11b" type="text" value=""/>
+          <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+        </div>
+      </div>
 
-    </body>
+      <div class="wholepage">
+        <div class="question">
+          <h2 id="testee">What work did she do?</h2> 
+          <input id="q11c" name="q11c" type="text" value=""/>
+          <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+        </div>
+      </div>
+
+      <div class="wholepage">
+        <div class="question">
+          <h2 id="testee">What state did she live in?</h2> 
+          <input id="q11d" name="q11d" type="text" value=""/>
+          <input type="submit" class="questionsubmit" onclick="next();" value="Submit">
+        </div>
+      </div>
+        
+      <div class="wholepage">
+        <div class="infopage">
+          Thank you for completing the test. The supervisor will now talk to you about the test you have done.
+        </div>
+          <input type="submit" class="backtostart" onclick="backtostart();" value="Start Over">
+        
+      </div>
+
+      <div class="wholepage">
+        <div class="infopage">
+          Jill was a very successfull stockbroker. 
+      She made a lot of money on the stock market.
+      She then met Jack, a devastatingly handsome man. 
+      She married him and had three children.
+      They lived in Chicago.
+      She then stopped work and stayed at home to bring up her children.
+      When they were teenagers, she went back to work. 
+      She and Jack lifed happily ever after.
+      </div>
+      <input type="button" class="backtoquestion" onclick=  "backtoquestion();" value="Back to Question">      
+     </div>
+
+
+      </body>
     </head>
-    </html>
+  </html>
 
 <!-- Things that have come accross which may be useful
 
