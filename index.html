@@ -308,6 +308,7 @@
       location.hash = "#p0";
       $(".wholepage").hide();
       $("#p0").show()
+      submitData()
       counter=0;
     }
 
@@ -698,6 +699,7 @@
 
       .gotostory, .backtoquestion{
         position:absolute;
+        width:50%;
         bottom:10px;
         margin:auto;
         left:0; right:0;
@@ -848,14 +850,14 @@
 
       <div class="wholepage">
         <div class="infopage">
-         <h2 id="testee">Please remember these five objects. I will ask you what they are later. <br>
-           <div id="testee">
+         <h2 id="testee">Please remember these five objects. I will ask you what they are later. <br><br></h2>
+           <div id="testee"><h3>
              Apple <br>
              Pen <br>
              Tie <br>
              House <br>
              Car <br>
-           </h2></div>
+           </h3></div>
           <input type="submit" class="infosubmit" onclick="next();" value="Continue">
         </div>
       </div>
@@ -881,7 +883,7 @@
 
       <div class="wholepage">
         <div class="infopage">
-          <h2 id="tester"> On the next page, please count the number of animals, not species, that they manage to recite. There will be a clock that starts automatically</h2>
+          <h2 id="tester"> On the next page, please count the number of animals, not species, that they manage to recite. Press play to start the clock</h2>
           </div>
         <input type="submit" class="infosubmit" onclick="next();" value="Continue">
       </div>
@@ -1049,7 +1051,7 @@
       They lived in Chicago.
       She then stopped work and stayed at home to bring up her children.
       When they were teenagers, she went back to work. 
-      She and Jack lifed happily ever after.
+      She and Jack lived happily ever after.
       </div>
       <input type="button" class="backtoquestion" onclick=  "backtoquestion();" value="Back to Question">      
      </div>
