@@ -8,8 +8,9 @@
 	<link rel="stylesheet" type="text/css" href="slumstyle.css"/>
 	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> <!-- Source file of the jquery database -->
 	<script src="formhandler.js"></script>
+	<script src="itemlist.js"></script>
 	<!-- Sets the title of the page -->
-	<title>CUPDE Testing</title>
+	<title>CUPDE Assessment</title>
 </head>
 
 <!-- Back to HTML Language -->
@@ -18,20 +19,21 @@
 	<div class="wholepage" id="maintitle">
 		<div class="wrapper">
 			<div class="titlepage">
-				<h1> Cambridge University Paper to Digital Equivalence Testing </h1>
+				<h1> Cambridge University Paper to Digital Equivalence Assessment </h1>
 			</div>
-			<input type="submit" class="guest" onclick="starttest();" value="Guest User">
+			<input type="submit" class="titlepage" onclick="starttest();" value="Guest User">
 			<div><br></div>
-			<input type="submit" class="admin" onclick="admincheck();" value="Admin">
+			<input type="submit" class="titlepage" onclick="admincheck();" value="Admin">
 		</div>
 	</div>
 
 
+
+
 	<div class="wholepage">
 		<div class="infopage">
-			This is an initial application designed to investigate whether mobile devices are suitable to adminster apps which affect mental health. This is NOT a screening test for dementia. We are not qualified to diagnose dementia, nor are we trying to. We are using the St Loius University Mental Status Exams (SLUMS) as an example of such a test. If you wish to participate in the study, please press continue.
+			This is an initial application designed to investigate whether mobile devices are suitable to adminster apps which affect mental health. This is NOT a screening test for dementia. We are not qualified to diagnose dementia, nor are we trying to. We are using the St Loius University Mental Status Exams as an example of such a test. If you wish to participate in the study, please press continue.
 		</div>
-		<input type="submit" class="infosubmit" onclick="next();" value="Continue">
 	</div>
 
 
@@ -71,7 +73,7 @@
 	</div>
 
 
-	<div class="wholepage">
+	<!--<div class="wholepage">
 		<div class="question">
 			<h2>Level of Alertness</h2>
 			<select id="alertnesslevels" name="alertnesslevel">
@@ -85,14 +87,13 @@
 				<option label="Unsure" value ="Unsure"></option>
 			</select>
 		</div>
-	</div>
+	</div> -->
 
 
 	<div class="wholepage">
 		<div class="infopage">
 			<h2> The following pages will ask you questions about your memory. It is not a test that you can fail, but is merely a tool to check the amount of memory you have, such as a thermometer measures your temperature. </h2>
 		</div>
-		<input type="submit" class="infosubmit" onclick="next();" value="Continue">
 	</div>
 
 
@@ -137,8 +138,12 @@
 				Car <br>
 			 </h3>
 			</div>
+			<audio controls>
+				<source src="objects list.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+			</audio>
+		
     	</div>
-          <input type="submit" class="infosubmit" onclick="next();" value="Continue">  
 	</div>
 
 
@@ -165,21 +170,75 @@
 
 	<div class="wholepage">
 		<div class="infopage">
-			<h2> On the next page, please count the number of animals, not species, that they manage to recite. Press play to start the clock</h2>
+			<h2> On the next page there will be an interactive element. In this question, a word will pop up and you will need to choose whether the word is an animal or not an animal. Press the corresponding button below the word.  The page will auto fade after 15 seconds. </h2>
 		</div>
-		<input type="submit" class="infosubmit" onclick="next();" value="Continue">
 	</div>
 
 
-	<div class="wholepage">
-		<div class="question">
-			<h2>Please name as many animals as you can in one minute.</h2>
-			<input id="q6" name="q6" type="text" value=""/>
-			<input type="submit" class="questionsubmit" onclick="next();" value="Submit"><br>
-			<input type="submit" class="timerstart" onclick="starttimer();" value="Start"> <br>
-			<span id="countdown" style="font-weight: bold;">60</span>
+	</div>
+
+		<div class="wholepage">
+		<div class="topbumper">
+			<div class="container">
+				<h1><p id="demo"></p></h1>
+			<input type="submit" class="entry" onclick="animal();" value="Animal">
+			<input type="submit" class="entry" onclick="nonanimal();" value="Non Animal">
 		</div>
 	</div>
+	</div>
+
+	<script>
+animalscore = 0;
+animalprevious = "NaN";
+animalswitch = 0;
+randomise()
+
+function dummy() {
+	randomise()
+}
+
+function randomise() {
+randomnumber = Math.floor(Math.random()*items.length);
+console.log(randomnumber)
+document.getElementById("demo").innerHTML = items[randomnumber];
+if (randomnumber<21) {
+		object = "animal"
+	} else {
+		object = "not"
+	}
+}
+
+
+
+
+function animal() {
+	if (object==="animal"){
+		animalscore = animalscore+1
+	}
+		if (object!=animalprevious){
+		animalswitch=animalswitch+1
+	}
+	animalprevious=object
+	randomise()	
+	console.log("score is " + animalscore)
+	console.log("switches is " + animalswitch)
+}
+
+
+function nonanimal() {
+	if (object==="not"){
+		animalscore=animalscore+1
+	}
+		if (object!=animalprevious){
+		animalswitch=animalswitch+1
+	}
+	animalprevious=object
+	randomise()
+	console.log("score is " + animalscore)
+	console.log("switches is " + animalswitch)
+}
+	document.getElementById("demo").innerHTML = items[randomnumber];
+</script>
 
 
 	<div class="wholepage">
@@ -194,7 +253,6 @@
 				<input id="q7e" name="q7e" type="text" value=""> <br><br>
 			</div>
 		</div>
-		<input type="submit" id="q7next" class="questionsubmit" onclick="next();" value="Submit">
 	</div>
 
 
@@ -202,33 +260,46 @@
 		<div class="infopage">
 			<h2>I'm going to give you a series of numbers and I would like you to give them to me backwards. For Example, if I say 42, you would say 24.</h2>
 		</div>
-		<input type="submit" class="infosubmit" onclick="next();" value="Continue">
 	</div>
 
 
 	<div class="wholepage">
 		<div class="question">
-			<h2> If I say 87, you would say</h2>
+			<h2> Question 8a</h2>
 			<input id="q8a" name="q8a" type="number" value=""/>
 			<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+			<br><br>
+			<audio controls>
+				<source src="numbersq1.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+			</audio>
 		</div>
 	</div>
 
 
 	<div class="wholepage">
 		<div class="question">
-			<h2> If I say 659, you would say</h2>
+			<h2> Question 8b</h2>
 			<input id="q8b" name="q8b" type="number" value=""/>
 			<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+				<br><br>		<audio controls>
+				<source src="numbersq2.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+			</audio>
 		</div>
 	</div>
 
 
 	<div class="wholepage">
 		<div class="question">
-			<h2> If I say 8537, you would say</h2>
+			<h2> Question 8c</h2>
 			<input id="q8c" name="q8c" type="number" value=""/>
 			<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
+			<br><br>
+			<audio controls>
+				<source src="numbersq3.mp3" type="audio/mpeg">
+					Your browser does not support the audio element.
+			</audio>
 		</div>
 	</div>
 
@@ -245,7 +316,6 @@
 				<tr><td><input class="button" type="button" onclick="clearcanvas1();" value="Clear"></td>
 					</tr>
 			</table>
-			<input type="submit" class="infosubmit" onclick="next();" value="Submit">
 		</div>
 	</div>
 
@@ -268,7 +338,6 @@
 				<table class="buttontable" align="center">
 					<tr><td><input class="button" type="button" onclick="clearcanvas2();" value="Clear"></td></tr>
 				</table>
-				<input type="submit" class="infosubmit" onclick="next();" value="Submit">
 			</div>
 		</div>
 
@@ -277,7 +346,6 @@
 			<div class="infopage">
 				<h2>I am going to tell you a story. Please listen carefully because afterwards I'm going to ask you some questions about it. Please ensure the sound is on</h2>
 			</div>
-			<input type="submit" class="infosubmit" onclick="nextaudiostart();" value="Continue">
 		</div>
 
 
@@ -286,11 +354,11 @@
 				<h2> Please listen to the story </h2>
 			</div>
 			<input type="button" class="gotostory" onclick="gotostory();" value="Press here if audio Does not Work"> <br>
-			<audio>
+			<audio controls>
 				<source src="story.mp3" type="audio/mpeg">
 					Your browser does not support the audio element.
 			</audio>
-			<input type="submit" class="infosubmit" onclick="nextaudiostop();" value="Continue">
+
 		</div>
 
 

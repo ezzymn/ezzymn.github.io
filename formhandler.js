@@ -1,3 +1,5 @@
+src="index.html"
+
 //List of All variables used
 var p1; //Coordinates for location on the application canvas that has been touched.
 var currentDrawCanvas; //Current canvas.
@@ -6,6 +8,7 @@ var mouseX;
 var mouseY;
 var keys = ["first_name", "surname", "age", "dob", "q1", "q2", "q3", "q5a", "q5b", "q6", "q7a", "q7b", "q7c", "q7d", "q7e", "q8a", "q8b", "q8c", "q11a", "q11b", "q11c", "q11d"];
 var currentValues = [];
+totaltimer = [];
 
 
 //Function. Used by moveEventFunction. Gets co-ordinate of touch
@@ -49,10 +52,6 @@ function stopaudio() {
 	audioPlayer.pause();
 	audioPlayer.currentTime = 0;
 }
-function playaudio() {
-	var audiosection =document.getElementsByTagName('audio')[0];
-	audiosection.play();
-}
 
 
 function tick() {
@@ -77,9 +76,9 @@ function starttimer() {
 function admincheck() {
 	var code = prompt("Please enter the password", "");
 	if (code === "5219") {
-	  location.hash = "#p0";
+	  location.hash = "#p28";
       $(".wholepage").hide();
-      $("#p30").show()
+      $("#p28").show()
 	} else {
 		alert("Sorry that is not the password");
 	}
@@ -150,6 +149,7 @@ function saveCurrent(){
 // console.log("Loaded current objects:", currentQuestion);
 // allAnswers.push(currentQuestion);
 allAnswers.push(currentAnswers);
+allAnswers.push(totaltimer);
 localStorage.setItem("all_items", JSON.stringify(allAnswers));
 }
 else {
@@ -160,6 +160,7 @@ else {
 // console.log("Loaded current objects:", currentQuestion);
 // allAnswers.push(currentQuestion);
 allAnswers.push(currentAnswers);
+allAnswers.push(totaltimer);
 localStorage.setItem("all_items", JSON.stringify(allAnswers));
 }
 alert("results saved in db.")
@@ -274,13 +275,25 @@ if (ctx) {
 }
 }
 
+function timer(){
+var d = new Date();
+var currentpage = d.getTime();
+questiontime=(currentpage - lastpage)
+page=location.hash
+totaltimer.push(page + " " + questiontime)
+console.log(totaltimer)
+lastpage=currentpage
+}
+
 
 function starttest(){
 	$("#local_database").hide();
-	console.log("Starttest worked")
 	location.hash = "#p1";
-$(".wholepage").hide()//Hide previous page
-$("#p1").show() //Show next page
+	$(".wholepage").hide()//Hide previous page
+	$("#p1").show() //Show next page
+	d = new Date();
+    lastpage = d.getTime();
+    console.log(lastpage)
 }
 
 
@@ -291,7 +304,6 @@ function submitData() {
 
 function backtostart(){
 	submitData();
-	console.log("Went Back to start")
 	location.hash = "#p0";
 	$(".wholepage").hide();
 	$("#p0").show();
@@ -301,50 +313,19 @@ function backtostart(){
 
 
 function admintest(){
-	console.log("Admintest worked")
 	location.hash = "#p0";
 }
 
 
-function nextaudiostart(){
-	console.log(location.hash)
-	var tonext=location.hash;
-	tonext = tonext.replace(/[^0-9\.]+/g, "");
-	tonext++;
-	console.log("We clicked the button")
-	console.log(tonext)
-	location.hash="#p"+tonext
-$(".wholepage").hide()//Hide previous page
-$("#p"+tonext).show() //Show next page
-playaudio()
-}
-
-
-function nextaudiostop(){
-	console.log(location.hash)
-	var tonext=location.hash;
-	tonext = tonext.replace(/[^0-9\.]+/g, "");
-	tonext++;
-	console.log("We clicked the button")
-	console.log(tonext)
-	location.hash="#p"+tonext
-$(".wholepage").hide()//Hide previous page
-$("#p"+tonext).show() //Show next page
-stopaudio()
-}
-
-
 function gotostory(){
-	console.log("We went to the story")
 	stopaudio()
-	location.hash="#p29"
+	location.hash="#p28"
 	$(".wholepage").hide()
-	$("#p29").show()
+	$("#p28").show()
 }
 
 
 function backtoquestion(){
-	console.log("We tried to go back")
 	location.hash="#p23"
 	$(".wholepage").hide()
 	$("#p23").show()
@@ -352,15 +333,15 @@ function backtoquestion(){
 
 
 function next(){
-	console.log(location.hash)
 	var tonext=location.hash;
 	tonext = tonext.replace(/[^0-9\.]+/g, "");
 	tonext++;
-	console.log("We clicked the button")
-	console.log(tonext)
 	location.hash="#p"+tonext
+	console.log("The next page is" + location.hash)
 $(".wholepage").hide()//Hide previous page
 $("#p"+tonext).show() //Show next page
+timer();
+stopaudio()
 }
 
 
@@ -479,13 +460,17 @@ $(document).ready(function(){
 		localStorage.setItem("current_item", JSON.stringify(currentQuestion));
 		console.log("saved:", currentQuestion);
 	});
+
+
 //Function. Applies next button to all question class
 $(".wholepage").each(function(i,e){
 	$(e).attr("id","p"+i)
 //The 'Next' button
-if (i<2) {
+if (i===0 || i===6 ) {
 var btn = $('<input type="button" class="hide" value="Next">'); //Creates
-} else if (i<6) {
+} else if (i===1 || i===9 || i===12 || i===15 || i===21) {
+	var btn =$('<input type="button" class="infosubmit" value="Continue">');
+}else if (i<6 || i===14 || i===19 || i===20 || i===22) {
 	var btn = $('<input type="button" class="next" value="Submit">');
 } else{
 	var btn = $('<input type="button" class="hide" value="Next">');
@@ -506,6 +491,11 @@ btn.bind('click', function(ev){
 $(".wholepage").hide()//Hide previous page
 $("#p"+toId).show() //Show next page
 location.hash = "#p"+toId //Moves to next page.
+timer()
+setTimeout(function() {
+    $('.topbumper').fadeOut('fast');
+}, 5000); // <-- time in milliseconds
+
 });
 $(e).append(btn) //'Next' button now listens for events
 });
@@ -565,3 +555,8 @@ can2.onmouseup = function(e) {
 	p1 = null;
 }
 });
+
+
+
+
+

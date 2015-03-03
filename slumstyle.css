@@ -11,11 +11,7 @@ padding: 15px;
 -webkit-appearance: none;
 background-color: #8A929D;
 }
-.guest {
-margin:auto;
-width:50%;
-}
-.admin{
+.titlepage{
 font-family: Helvetica ;
 font-weight: bold ;
 padding: 15px;
@@ -122,7 +118,7 @@ margin:auto;
 }
 .wrapper2{
 position: absolute;
-top:50;
+top:50px;
 width: 100%;
 text-align: center;
 right: 0; left: 0;
@@ -166,4 +162,27 @@ width:100%;
 }
 table{
 text-align: center;
+}
+
+.entry {
+position:relative;
+font-family: Helvetica ;
+font-weight: bold ;
+padding: 15px;
+width:45%;
+}
+
+.container{
+	position:relative;
+	width :60%;
+	margin:auto;
+	left:0;
+}
+
+.topbumper{
+	position:absolute;
+	text-align:center;
+	width:100%;
+	top:40%;
+	margin:auto;
 }
