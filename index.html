@@ -170,14 +170,12 @@
 
 	<div class="wholepage">
 		<div class="infopage">
-			<h2> On the next page there will be an interactive element. In this question, a word will pop up and you will need to choose whether the word is an animal or not an animal. Press the corresponding button below the word.  The page will auto fade after 15 seconds. </h2>
+			<h2> On the next page there will be an example of an interactive element. In this question, a word will pop up and you will need to choose whether the word is an animal, or not an animal. There will be two buttons below the words, corresponding to an animal, or not an animal. The page will auto fade after 15 seconds.</h2>
 		</div>
 	</div>
 
 
-	</div>
-
-		<div class="wholepage">
+			<div class="wholepage">
 		<div class="topbumper">
 			<div class="container">
 				<h1><p id="demo"></p></h1>
@@ -192,10 +190,6 @@ animalscore = 0;
 animalprevious = "NaN";
 animalswitch = 0;
 randomise()
-
-function dummy() {
-	randomise()
-}
 
 function randomise() {
 randomnumber = Math.floor(Math.random()*items.length);
@@ -354,7 +348,7 @@ function nonanimal() {
 				<h2> Please listen to the story </h2>
 			</div>
 			<input type="button" class="gotostory" onclick="gotostory();" value="Press here if audio Does not Work"> <br>
-			<audio controls>
+			<audio controls class="storyaudio">
 				<source src="story.mp3" type="audio/mpeg">
 					Your browser does not support the audio element.
 			</audio>

@@ -468,7 +468,10 @@ $(".wholepage").each(function(i,e){
 //The 'Next' button
 if (i===0 || i===6 ) {
 var btn = $('<input type="button" class="hide" value="Next">'); //Creates
-} else if (i===1 || i===9 || i===12 || i===15 || i===21) {
+} else if (i===12) {
+var btn = $('<input type="button" class="infosubmit" value="Continue">');
+
+}else if (i===1 || i===5 || i===9 || i===12 || i===13 || i===15 || i===21) {
 	var btn =$('<input type="button" class="infosubmit" value="Continue">');
 }else if (i<6 || i===14 || i===19 || i===20 || i===22) {
 	var btn = $('<input type="button" class="next" value="Submit">');
@@ -492,9 +495,15 @@ $(".wholepage").hide()//Hide previous page
 $("#p"+toId).show() //Show next page
 location.hash = "#p"+toId //Moves to next page.
 timer()
+
+if (i===12) {
+	console.log("we got")
 setTimeout(function() {
-    $('.topbumper').fadeOut('fast');
-}, 5000); // <-- time in milliseconds
+	console.log("to here")
+   $('.topbumper').fadeOut('fast');
+}, 15000); // <-- time in milliseconds
+}
+
 
 });
 $(e).append(btn) //'Next' button now listens for events

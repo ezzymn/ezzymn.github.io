@@ -186,3 +186,9 @@ width:45%;
 	top:40%;
 	margin:auto;
 }
+
+.storyaudio{
+	position : absolute;
+	/*margin:auto; */
+	top: 80%;
+}
