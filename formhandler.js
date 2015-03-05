@@ -76,9 +76,9 @@ function starttimer() {
 function admincheck() {
 	var code = prompt("Please enter the password", "");
 	if (code === "5219") {
-	  location.hash = "#p28";
+	  location.hash = "#p29";
       $(".wholepage").hide();
-      $("#p28").show()
+      $("#p29").show()
 	} else {
 		alert("Sorry that is not the password");
 	}

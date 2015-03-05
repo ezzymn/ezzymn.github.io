@@ -189,6 +189,15 @@ width:45%;
 
 .storyaudio{
 	position : absolute;
-	/*margin:auto; */
+	margin:auto;
 	top: 80%;
+	width:80%
+	left:0;
+}
+
+#triangle {
+	position:absolute;
+	top: 75%;
+	width: 100%;
+	left:0;
 }
