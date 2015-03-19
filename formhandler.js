@@ -168,8 +168,6 @@ allAnswers.push(totaltimer);
 localStorage.setItem("all_items", JSON.stringify(allAnswers));
 }
 alert("results saved in db.")
-location.hash = "#p0";
-location.reload();
 //seeDatabase();
 }
 
