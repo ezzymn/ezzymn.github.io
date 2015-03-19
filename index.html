@@ -9,7 +9,7 @@
 	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> <!-- Source file of the jquery database -->
 	<script src="formhandler.js"></script>
 	<script src="itemlist.js"></script>
-	<script src="js/canvas2image.js"></script>
+	<script src="Canvas2ImagePlugin.js"></script>
 	<!-- Sets the title of the page -->
 	<title>CUPDE Assessment</title>
 </head>
@@ -297,6 +297,33 @@ function nonanimal() {
 		</div>
 	</div>
 
+	<script>
+	function onDeviceReady()
+{
+    var canvas2ImagePlugin = window.plugins.canvas2ImagePlugin;
+}
+
+	function nextcanvassave() {
+	var tonext=location.hash;
+	tonext = tonext.replace(/[^0-9\.]+/g, "");
+	tonext++;
+	location.hash="#p"+tonext
+$(".wholepage").hide()//Hide previous page
+$("#p"+tonext).show() //Show next page
+ window.canvas2ImagePlugin.saveImageDataToLibrary(
+        function(msg) {
+           imgCanvasPath = msg;
+            alert("imagePath: " + " " + msg);
+        },
+        function(err) {
+            alert(err);
+        },
+
+        document.getElementById('canvas1div')
+    );  
+}
+</script>
+
 
 		<div class="wholepage">
 			<div class="shapepage">
@@ -316,6 +343,7 @@ function nonanimal() {
 				<table class="buttontable" align="center">
 					<tr><td><input class="button" type="button" onclick="clearcanvas2();" value="Clear"></td></tr>
 				</table>
+				<input type="button" class="infosubmit" onclick="nextcanvassave();" value="Submit">
 			</div>
 		</div>
 

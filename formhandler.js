@@ -1,4 +1,5 @@
 src="index.html"
+src="Canvas2ImagePlugin.js"
 
 //List of All variables used
 var p1; //Coordinates for location on the application canvas that has been touched.
@@ -429,17 +430,7 @@ function audiobutton() {
 
 }
 
-function nextcanvassave() {
-	var tonext=location.hash;
-	tonext = tonext.replace(/[^0-9\.]+/g, "");
-	tonext++;
-	location.hash="#p"+tonext
-$(".wholepage").hide()//Hide previous page
-$("#p"+tonext).show() //Show next page
- window.canvas2ImagePlugin.saveImageDataToLibrary(
- document.getElementById('canvas1div')
- );
-}
+
 
 
 function exportData() {
