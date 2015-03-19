@@ -482,6 +482,21 @@ $(this).attr({
 });
 }
 
+Function.prototype.bind = function(parent) {
+    var f = this;
+    var args = [];
+
+    for (var a = 1; a < arguments.length; a++) {
+        args[args.length] = arguments[a];
+    }
+
+    var temp = function() {
+        return f.apply(parent, args);
+    }
+
+    return(temp);
+}
+
 
 //Attaches the event handler 'touchmove' to the document.
 $(document).bind('touchmove', false);
@@ -531,16 +546,16 @@ timer()
 if (i===10) {
 	setTimeout(function() {
 		$('.mathquestion').fadeOut('fast');
-	}, 10000)
+	}.bind(this), 10000)
 }
 
-/*if (i===12) {
+if (i===12) {
 	console.log("we got")
 setTimeout(function() {
 	console.log("to here")
    $('.topbumper').fadeOut('fast');
-}, 15000); // <-- time in milliseconds
-} */
+}.bind(this), 15000); // <-- time in milliseconds
+} 
 
 
 });
