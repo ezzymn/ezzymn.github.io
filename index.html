@@ -9,7 +9,6 @@
 	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> <!-- Source file of the jquery database -->
 	<script src="formhandler.js"></script>
 	<script src="itemlist.js"></script>
-	<script src="Canvas2ImagePlugin.js"></script>
 	<!-- Sets the title of the page -->
 	<title>CUPDE Assessment</title>
 </head>
@@ -293,36 +292,8 @@ function nonanimal() {
 				<tr><td><input class="button" type="button" onclick="clearcanvas1();" value="Clear"></td>
 					</tr>
 			</table>
-			<input type="button" class="infosubmit" onclick="nextcanvassave();" value="Submit">
 		</div>
 	</div>
-
-	<script>
-	function onDeviceReady()
-{
-    var canvas2ImagePlugin = window.plugins.canvas2ImagePlugin;
-}
-
-	function nextcanvassave() {
-	var tonext=location.hash;
-	tonext = tonext.replace(/[^0-9\.]+/g, "");
-	tonext++;
-	location.hash="#p"+tonext
-$(".wholepage").hide()//Hide previous page
-$("#p"+tonext).show() //Show next page
- window.canvas2ImagePlugin.saveImageDataToLibrary(
-        function(msg) {
-           imgCanvasPath = msg;
-            alert("imagePath: " + " " + msg);
-        },
-        function(err) {
-            alert(err);
-        },
-
-        document.getElementById('canvas1div')
-    );  
-}
-</script>
 
 
 		<div class="wholepage">
@@ -343,7 +314,6 @@ $("#p"+tonext).show() //Show next page
 				<table class="buttontable" align="center">
 					<tr><td><input class="button" type="button" onclick="clearcanvas2();" value="Clear"></td></tr>
 				</table>
-				<input type="button" class="infosubmit" onclick="nextcanvassave();" value="Submit">
 			</div>
 		</div>
 
@@ -406,8 +376,10 @@ $("#p"+tonext).show() //Show next page
 		<div class="wholepage">
 			<div class="infopage">
 				Thank you for completing the test. The supervisor will now talk to you about the test you have done.
-			</div>
-			<input type="submit" class="backtostart" onclick="backtostart();" value="Start Over">
+			<br><br>
+			<input type="submit" class="titlepage" onclick="screenshot();" value = "Screen Shots"><br><br>
+			<input type="submit" class="titlepage" onclick="backtostart();" value="Start Over">
+		</div>
 		</div>
 
 

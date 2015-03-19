@@ -315,7 +315,6 @@ function emptystart(){
 }
 
 function backtostart(){
-	submitData();
 	location.hash = "#p0";
 	$(".wholepage").hide();
 	$("#p0").show();
@@ -488,6 +487,12 @@ Function.prototype.bind = function(parent) {
     return(temp);
 }
 
+function screenshot() {
+submitData();
+$(".wholepage").hide()//Hide previous page
+$("#p19").show() //Show next page
+}
+
 
 //Attaches the event handler 'touchmove' to the document.
 $(document).bind('touchmove', false);
@@ -511,7 +516,7 @@ var btn = $('<input type="button" class="infosubmit" value="Continue">');
 
 }else if (i===1 || i===5 || i===9 || i===12 || i===13 || i===15 || i===21) {
 	var btn =$('<input type="button" class="infosubmit" value="Continue">');
-}else if (i<6 || i===14 || i===22) {
+}else if (i<6 || i===14 || i===19 || i ===20 || i===22) {
 	var btn = $('<input type="button" class="next" value="Submit">');
 } else{
 	var btn = $('<input type="button" class="hide" value="Next">');
