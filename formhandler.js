@@ -9,6 +9,9 @@ var mouseY;
 var keys = ["first_name", "surname", "age", "dob", "q1", "q2", "q3", "q5a", "q5b", "q6", "q7a", "q7b", "q7c", "q7d", "q7e", "q8a", "q8b", "q8c", "q11a", "q11b", "q11c", "q11d"];
 var currentValues = [];
 totaltimer = [];
+var circlecounter = 0;
+var trianglecounter = 0;
+var audiocounter = 0;
 
 
 //Function. Used by moveEventFunction. Gets co-ordinate of touch
@@ -301,6 +304,14 @@ function submitData() {
 	saveCurrent();
 }
 
+function emptystart(){
+	location.hash = "#p0";
+	$(".wholepage").hide();
+	$("#p0").show();
+	circlecounter=0;
+	trianglecounter=0;
+	audiocounter=0;
+}
 
 function backtostart(){
 	submitData();
@@ -308,7 +319,9 @@ function backtostart(){
 	$(".wholepage").hide();
 	$("#p0").show();
 	localStorage.removeItem("current_item");
-	counter=0;
+	circlecounter=0;
+	trianglecounter=0;
+	audiocounter=0;
 }
 
 
@@ -368,20 +381,19 @@ ctx.arc(x, y, size, 0, Math.PI*2, true);
 ctx.closePath();
 ctx.fill();
 }
-var counter1 = 0;
-var counter2 = 0;
+
 
 
 function clearcanvas1(){
-	counter1++
-	console.log(counter1)
+	circlecounter++
+	console.log(circlecounter)
 	drawCircle($('#canvas1')[0])
 }
 
 
 function clearcanvas2(){
-	counter2++
-	console.log(counter2)
+	trianglecounter++
+	console.log(trianglecounter)
 	drawBoxes($('#canvas2')[0])
 }
 
@@ -407,6 +419,26 @@ getMousePos(e);
 if (mouseDown==1) {
 	drawDot(ctx,mouseX,mouseY,size,e);
 }
+}
+
+function audiobutton() {
+	var music = new Audio('objects list.mp3')
+	music.play();
+	audiocounter++
+	console.log(audiocounter)
+
+}
+
+function nextcanvassave() {
+	var tonext=location.hash;
+	tonext = tonext.replace(/[^0-9\.]+/g, "");
+	tonext++;
+	location.hash="#p"+tonext
+$(".wholepage").hide()//Hide previous page
+$("#p"+tonext).show() //Show next page
+ window.canvas2ImagePlugin.saveImageDataToLibrary(
+ document.getElementById('canvas1div')
+ );
 }
 
 
@@ -466,14 +498,14 @@ $(document).ready(function(){
 $(".wholepage").each(function(i,e){
 	$(e).attr("id","p"+i)
 //The 'Next' button
-if (i===0 || i===6 ) {
+if (i===0 || i===6 || i===4 ) {
 var btn = $('<input type="button" class="hide" value="Next">'); //Creates
 } else if (i===12) {
 var btn = $('<input type="button" class="infosubmit" value="Continue">');
 
 }else if (i===1 || i===5 || i===9 || i===12 || i===13 || i===15 || i===21) {
 	var btn =$('<input type="button" class="infosubmit" value="Continue">');
-}else if (i<6 || i===14 || i===19 || i===20 || i===22) {
+}else if (i<6 || i===14 || i===22) {
 	var btn = $('<input type="button" class="next" value="Submit">');
 } else{
 	var btn = $('<input type="button" class="hide" value="Next">');
@@ -496,13 +528,19 @@ $("#p"+toId).show() //Show next page
 location.hash = "#p"+toId //Moves to next page.
 timer()
 
-if (i===12) {
+if (i===10) {
+	setTimeout(function() {
+		$('.mathquestion').fadeOut('fast');
+	}, 10000)
+}
+
+/*if (i===12) {
 	console.log("we got")
 setTimeout(function() {
 	console.log("to here")
    $('.topbumper').fadeOut('fast');
 }, 15000); // <-- time in milliseconds
-}
+} */
 
 
 });

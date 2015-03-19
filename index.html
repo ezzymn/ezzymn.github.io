@@ -9,6 +9,7 @@
 	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> <!-- Source file of the jquery database -->
 	<script src="formhandler.js"></script>
 	<script src="itemlist.js"></script>
+	<script src="js/canvas2image.js"></script>
 	<!-- Sets the title of the page -->
 	<title>CUPDE Assessment</title>
 </head>
@@ -60,15 +61,9 @@
 	<div class="wholepage">
 		<div class="question">
 			<h2>Highest level of Education</h2>
-			<select id="educationlevels" name="education">
-				<option value="">- Select a level of education-</option>
-				<option label="Primary" value="">Primary</option>
-				<option label="Secondary" value="">Secondary</option>
-				<option label="University" value="">University</option>
-				<option label="Masters" value="">Masters</option>
-				<option label="PhD" value="">PhD</option>
-				<option label="Other" value="">Other</option>
-			</select>
+			<div><br></div>
+			<input id="education" name="education" type="text" value=""/>
+			<input type="submit" class="questionsubmit" onclick="next();" value="Submit">
 		</div>
 	</div>
 
@@ -129,27 +124,15 @@
 
 	<div class="wholepage">
 		<div class="infopage">
-			<h2>Please remember these five objects. I will ask you what they are later. <br><br></h2>
-			<div><h3>
-				Apple <br>
-				Pen <br>
-				Tie <br>
-				House <br>
-				Car <br>
-			 </h3>
+			<h2>Press play to listen to the objects. Repeat them out loud and make sure you can recite all 5. I will ask you what they are later. <br><br></h2>
+			<input type="submit" class="titlepage" onclick="audiobutton();" value="Play list">
 			</div>
-			<audio controls>
-				<source src="objects list.mp3" type="audio/mpeg">
-					Your browser does not support the audio element.
-			</audio>
-		
-    	</div>
 	</div>
 
 
 	<div class="wholepage">
 		<div class="question">
-			<h2>You have $100 and you go to the store and buy a dozen apples for $3 and a tricyle for $20.</h2>
+			<h2 id="mathquestion">You have $100 and you go to the store and buy a dozen apples for $3 and a tricyle for $20.</h2>
 			<h2>How much did you spend?</h2>
 			<div><br></div>
 			<input id="q5a" name="q5a" type="text" value=""/>
@@ -310,6 +293,7 @@ function nonanimal() {
 				<tr><td><input class="button" type="button" onclick="clearcanvas1();" value="Clear"></td>
 					</tr>
 			</table>
+			<input type="button" class="infosubmit" onclick="nextcanvassave();" value="Submit">
 		</div>
 	</div>
 
@@ -420,7 +404,7 @@ function nonanimal() {
       		  <br><br>
       	    	 <input type="submit" class="admin" onclick="clearLocalData();" value="Clear Database">
       		  <br><br>
-     	  		 <input type="submit" class="admin" onclick="backtostart();" value="Back to Title">
+     	  		 <input type="submit" class="admin" onclick="emptystart();" value="Back to Title">
     	  </div>
    			 </div>
  		 </div>
@@ -436,6 +420,7 @@ function nonanimal() {
 			<!--input type="submit" onclick="submitData();" value="submit via mail csv" /-->
 			<input type="submit" onclick="clearLocalData();" value="delete all data" />
 			<input type="submit" onclick="exportData();" value="export data to csv file"/>
+			<input type="submit" onClick="emptystart();" value="Back to start"/>
 			<!--a href="#" class="export" id="export_data">Export Table data into csv file</a-->
 		</div>
 
