@@ -13,7 +13,8 @@ totaltimer = [];
 var circlecounter = 0;
 var trianglecounter = 0;
 var audiocounter = 0;
-
+var storycounter=0;
+var mathsacounter=0, mathsbcounter=0, mathsccounter=0;
 
 //Function. Used by moveEventFunction. Gets co-ordinate of touch
 function getCoords(e) {
@@ -490,6 +491,50 @@ Function.prototype.bind = function(parent) {
     }
 
     return(temp);
+}
+
+function playstory() {
+
+	if (storycounter<1) {
+	var story = new Audio('story.mp3')
+	story.play();
+	storycounter++
+} else {
+	alert("You are only allowed to hear the audio once")
+}
+}
+
+function playmathsa() {
+
+	if (mathsacounter<1) {
+	var mathsa = new Audio('numbersq1.mp3')
+	mathsa.play();
+	mathsacounter++
+} else {
+	alert("You are only allowed to hear the audio once")
+}
+}
+
+function playmathsb() {
+
+	if (mathsbcounter<1) {
+	var mathsb = new Audio('numbersq2.mp3')
+	mathsb.play();
+	mathsbcounter++
+} else {
+	alert("You are only allowed to hear the audio once")
+}
+}
+
+function playmathsc() {
+
+	if (mathsccounter<1) {
+	var mathsc = new Audio('numbersq3.mp3')
+	mathsc.play();
+	mathsccounter++
+} else {
+	alert("You are only allowed to hear the audio once")
+}
 }
 
 function screenshot() {

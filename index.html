@@ -199,21 +199,15 @@ document.getElementById("demo").innerHTML = items[randomnumber];
 		<input id="q8a" name="q8a" type="number" value=""/>
 		<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
 		<br><br>
-		<audio controls>
-			<source src="numbersq1.mp3" type="audio/mpeg">
-				Your browser does not support the audio element.
-			</audio>
+		<input type="button" class="titlepage" onclick="playmathsa()" value ="Listen to Question">
 		</div>
 	</div>
 	<div class="wholepage">
 		<div class="question">
 			<h2> Question 8b</h2>
 			<input id="q8b" name="q8b" type="number" value=""/>
-			<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
-			<br><br> <audio controls>
-			<source src="numbersq2.mp3" type="audio/mpeg">
-				Your browser does not support the audio element.
-			</audio>
+			<input type="submit" class="questionsubmit" onclick="next()" value="Submit">		<br><br> 
+			<input type="button" class="titlepage" onclick="playmathsb()" value ="Listen to Question">
 		</div>
 	</div>
 	<div class="wholepage">
@@ -222,12 +216,10 @@ document.getElementById("demo").innerHTML = items[randomnumber];
 			<input id="q8c" name="q8c" type="number" value=""/>
 			<input type="submit" class="questionsubmit" onclick="next()" value="Submit">
 			<br><br>
-			<audio controls>
-				<source src="numbersq3.mp3" type="audio/mpeg">
-					Your browser does not support the audio element.
-				</audio>
+			<input type="button" class="titlepage" onclick="playmathsc()" value ="Listen to Question">
 			</div>
 		</div>
+
 		<div class="wholepage">
 			<div class="clockpage">
 				<div class="drawheader">
@@ -262,21 +254,21 @@ document.getElementById("demo").innerHTML = items[randomnumber];
 					</table>
 				</div>
 			</div>
+
 			<div class="wholepage">
 				<div class="infopage">
 					<h2>I am going to tell you a story. Please listen carefully because afterwards I'm going to ask you some questions about it. Please ensure the sound is on</h2>
 				</div>
 			</div>
+
 			<div class="wholepage">
 				<div class="infopage">
-					<h2> Please listen to the story </h2>
-				</div>
+					<h2> Please listen to the story </h2>				
+				<input type="button" class="titlepage" onclick="playstory()" value ="Listen to Story">
+			</div>
 				<input type="button" class="gotostory" onclick="gotostory();" value="Press here if audio Does not Work"> <br>
-				<audio controls class="storyaudio">
-					<source src="story.mp3" type="audio/mpeg">
-						Your browser does not support the audio element.
-					</audio>
 				</div>
+
 				<div class="wholepage">
 					<div class="question">
 						<h2>What was the female's name?</h2>
