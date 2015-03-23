@@ -360,7 +360,6 @@ function next(){
 $(".wholepage").hide()//Hide previous page
 $("#p"+tonext).show() //Show next page
 timer();
-stopaudio()
 }
 
 
@@ -604,8 +603,10 @@ $("#p"+toId).show() //Show next page
 location.hash = "#p"+toId //Moves to next page.
 timer()
 
-if (i===10) {
+if (i===9) {
+	console.log("we are doing this")
 	setTimeout(function() {
+		console.log("Or are we")
 		$('.mathquestion').fadeOut('fast');
 	}.bind(this), 10000)
 }
