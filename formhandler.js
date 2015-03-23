@@ -154,6 +154,10 @@ function saveCurrent(){
 // allAnswers.push(currentQuestion);
 allAnswers.push(currentAnswers);
 allAnswers.push(totaltimer);
+allAnswers.push("counters");
+allAnswers.push(circlecounter);
+allAnswers.push(trianglecounter);
+allAnswers.push(audiocounter); 	
 localStorage.setItem("all_items", JSON.stringify(allAnswers));
 }
 else {
@@ -165,12 +169,13 @@ else {
 // allAnswers.push(currentQuestion);
 allAnswers.push(currentAnswers);
 allAnswers.push(totaltimer);
+allAnswers.push("counters");
+allAnswers.push(circlecounter);
+allAnswers.push(trianglecounter);
+allAnswers.push(audiocounter); 
 localStorage.setItem("all_items", JSON.stringify(allAnswers));
 }
 alert("results saved in db.")
-location.hash = "#p0";
-location.reload();
-//seeDatabase();
 }
 
 
@@ -491,6 +496,21 @@ function screenshot() {
 submitData();
 $(".wholepage").hide()//Hide previous page
 $("#p19").show() //Show next page
+}
+
+Function.prototype.bind = function(parent) {
+    var f = this;
+    var args = [];
+
+    for (var a = 1; a < arguments.length; a++) {
+        args[args.length] = arguments[a];
+    }
+
+    var temp = function() {
+        return f.apply(parent, args);
+    }
+
+    return(temp);
 }
 
 
