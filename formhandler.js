@@ -36,7 +36,7 @@ function getCoords(e) {
 // Function. Clears all local data stored after confirm
 function clearLocalData(){
 	if(confirm("really?")){
-		localStorage.removItem("all_items");
+		localStorage.removeItem("all_items");
 		localStorage.removeItem("current_item");
 		seeDatabase();
 	}
